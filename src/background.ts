@@ -66,6 +66,7 @@ app.on('ready', async () => {
     }
   }
   createWindow()
+  libraryScan()
 })
 
 // Exit cleanly on request from parent process in development mode.
@@ -98,7 +99,7 @@ const zip = new JSZip();
 
 
 // library scanning
-let library = [];
+let library: Chart[] = [];
 store.events.on("change", (key: string) => {
   if(key == "gamePath") {
     libraryScan()
@@ -111,7 +112,9 @@ function libraryScan() {
   if (gamePath) {
     fs.readdirSync(gamePath).forEach(async file => {
       const zipfile = await zip.loadAsync(fs.readFileSync(path.join(gamePath, file)));
-      let tempChartFile = {} as Chart
+      let tempChartFile = {
+        isLocal: true
+      } as Chart
       for (const [name, file] of Object.entries(zipfile.files)) {
         if (name.endsWith(".png")) {
           tempChartFile.b64Cover = await file.async("base64");
@@ -124,10 +127,11 @@ function libraryScan() {
     });
   }
 }
-libraryScan()
 
 //handlers
-
+ipcMain.on('library-get', (event) => {
+  event.returnValue = library;
+})
 ipcMain.handle('request', async (_, axios_request: string | any) => {
   const result = await axios(axios_request)
   return { data: result.data, status: result.status }

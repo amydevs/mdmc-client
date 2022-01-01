@@ -4,6 +4,8 @@ import router from './router'
 import store from './store'
 import vuetify from './plugins/vuetify'
 
+import { Chart } from '@/types/chart'
+
 Vue.config.productionTip = false
 
 new Vue({
@@ -16,6 +18,9 @@ new Vue({
 declare global {
   interface Window {
     electron: {
+      library: {
+        get: () => Chart[]
+      }
       dialog: {
         openDialog: () => string[] | null
       },

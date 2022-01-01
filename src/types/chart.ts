@@ -12,6 +12,9 @@ export interface Chart {
     difficulty2: number;
     difficulty3: number;
     unlockLevel: number;
-    id: number;
+
+    id?: number;
+
+    isLocal?: boolean;
     b64Cover?: string;
 }

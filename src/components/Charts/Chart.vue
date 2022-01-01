@@ -9,7 +9,8 @@
                 size="150"
                 tile
             >
-            <v-img :src="`https://mdmc.moe/charts/${chart.id}/cover.png`"/>
+            <v-img v-if="!chart.isLocal" :src="`https://mdmc.moe/charts/${chart.id}/cover.png`" />
+            <v-img v-else :src="`data:image/png;base64, ${chart.b64Cover}`" />
         </v-avatar>
         <div class="flex-grow-1">
             <v-card-actions class="py-0">
@@ -21,7 +22,7 @@
             <v-card-title v-text="chart.name"></v-card-title>
             <v-card-subtitle v-text="chart.author"></v-card-subtitle>
             
-            <v-card-actions>
+            <v-card-actions v-if="!chart.isLocal">
                 <v-btn icon>
                 <v-icon>mdi-account-circle</v-icon>
                 </v-btn>
@@ -33,6 +34,29 @@
                 <v-btn icon>
                 <v-icon>mdi-play-circle</v-icon>
                 </v-btn>
+            </v-card-actions>
+            <v-card-actions>
+                <v-btn icon>
+                    <v-icon>mdi-account-circle</v-icon>
+                </v-btn>
+                {{ chart.levelDesigner }}
+                <v-spacer></v-spacer>
+                <div v-if="!chart.isLocal">
+                    <v-btn icon>
+                        <v-icon>mdi-download-circle</v-icon>
+                    </v-btn>
+                    <v-btn icon>
+                        <v-icon>mdi-play-circle</v-icon>
+                    </v-btn>
+                </div>
+                <div v-else>
+                    <v-btn icon>
+                        <v-icon>mdi-download-circle</v-icon>
+                    </v-btn>
+                    <v-btn icon>
+                        <v-icon>mdi-play-circle</v-icon>
+                    </v-btn>
+                </div>
             </v-card-actions>
         </div>
     </div>

@@ -7,6 +7,11 @@ const {
 // the ipcRenderer without exposing the entire object
 
 contextBridge.exposeInMainWorld("electron", {
+    library: {
+        get: () => {
+            return ipcRenderer.sendSync('library-get') // adjust naming for your project
+        },
+    },
     dialog: {
         openDialog: () => {
             return ipcRenderer.sendSync('open-dialog') // adjust naming for your project
