@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <v-row>
+    <v-row class="justify-center">
       <Chart v-for="chart in charts" :chart="chart" />
     </v-row>
   </v-container>
