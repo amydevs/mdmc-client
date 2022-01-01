@@ -55,7 +55,7 @@
 
       <v-list dense>
         <v-list-item
-          v-for="item in downloadItems"
+          v-for="item in $electron.downloads.getAll()"
           :key="item.name"
         >
           {{ item.name }}
@@ -77,11 +77,11 @@ export default Vue.extend({
     PathDialogue
   },
   async mounted() {
-    console.log(window.electron.downloads.getAll());
   },
   data: () => ({
     drawer: false,
     downloadDrawer: false,
+    downloadI: [],
     items: [
         {icon: 'mdi-home', title:'Home', route:'/'},
         {icon: 'mdi-tools', title:'Library', route:'/library'}
@@ -90,9 +90,6 @@ export default Vue.extend({
   computed: {
     currentRouteName() {
       return this.$route.name;
-    },
-    downloadItems() {
-      return window.electron.downloads.getAll();
     }
   }
 

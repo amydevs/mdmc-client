@@ -210,5 +210,5 @@ ipcMain.on("download-add", (event, chart: Chart) => {
 });
 
 ipcMain.on("download-getAll", (event) => {
-  event.returnValue = downloads.workersList();
+  event.returnValue = downloads.workersList().map(w => w.data);
 });

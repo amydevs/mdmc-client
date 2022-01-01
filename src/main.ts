@@ -6,6 +6,7 @@ import vuetify from './plugins/vuetify'
 
 import { Chart } from '@/types/chart'
 
+Vue.prototype.$electron = window.electron
 Vue.config.productionTip = false
 
 new Vue({
@@ -24,7 +25,7 @@ declare global {
         get: (channel: string, ...args: any[]) => void;
       },
       downloads: {
-        getAll: () => import('async').DataContainer<Chart>[]
+        getAll: () => Chart[]
       },
       library: {
         get: () => Chart[]
