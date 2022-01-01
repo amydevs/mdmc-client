@@ -120,21 +120,26 @@ function libraryScan() {
   if (gamePath) {
     fs.readdirSync(gamePath).forEach(async file => {
       if (file.endsWith(".mdm")) {
-        const localPath = path.join(gamePath, file);
-        const zipfile = await zip.loadAsync(fs.readFileSync(localPath));
-        let tempChartFile = {
-          isLocal: true,
-          localPath: localPath
-        } as Chart
-        for (const [name, file] of Object.entries(zipfile.files)) {
-          if (name.endsWith(".png")) {
-            tempChartFile.b64Cover = await file.async("base64");
+        try {
+          const localPath = path.join(gamePath, file);
+          const zipfile = await zip.loadAsync(fs.readFileSync(localPath));
+          let tempChartFile = {
+            isLocal: true,
+            localPath: localPath
+          } as Chart
+          for (const [name, file] of Object.entries(zipfile.files)) {
+            if (name.endsWith(".png")) {
+              tempChartFile.b64Cover = await file.async("base64");
+            }
+            if (name.endsWith(".json")) {
+              Object.assign(tempChartFile, JSON.parse(await file.async("string")) as Chart);
+            }
           }
-          if (name.endsWith(".json")) {
-            Object.assign(tempChartFile, JSON.parse(await file.async("string")) as Chart);
-          }
+          library.push(tempChartFile)
         }
-        library.push(tempChartFile)
+        catch {
+          console.error(`failed to load chart: ${file}`)
+        }
       }
     });
   }
