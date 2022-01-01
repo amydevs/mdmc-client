@@ -1,6 +1,6 @@
 'use strict'
 
-import { app, protocol, BrowserWindow } from 'electron'
+import { app, protocol, BrowserWindow, ipcMain } from 'electron'
 import { createProtocol } from 'vue-cli-plugin-electron-builder/lib'
 import installExtension, { VUEJS_DEVTOOLS } from 'electron-devtools-installer'
 const isDevelopment = process.env.NODE_ENV !== 'production'
@@ -59,7 +59,7 @@ app.on('ready', async () => {
     // Install Vue Devtools
     try {
       await installExtension(VUEJS_DEVTOOLS)
-    } catch (e) {
+    } catch (e:any) {
       console.error('Vue Devtools failed to install:', e.toString())
     }
   }
@@ -80,3 +80,10 @@ if (isDevelopment) {
     })
   }
 }
+
+import axios from "axios"
+
+ipcMain.handle('request', async (_, axios_request: string | any) => {
+  const result = await axios(axios_request)
+  return { data: result.data, status: result.status }
+})
