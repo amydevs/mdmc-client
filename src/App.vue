@@ -46,7 +46,7 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import PathDialogue from '@/components/PathDialogue.vue'
+import PathDialogue from '@/components/Misc/PathDialogue.vue'
 
 export default Vue.extend({
   name: 'App',
