@@ -83,11 +83,50 @@ if (isDevelopment) {
   }
 }
 
+// custom code
 import Store from "electron-store";
 
 const store = new Store();
 
 import axios from "axios"
+
+import fs from 'fs';
+import { Chart } from '@/types/chart'
+import JSZip from "jszip";
+const zip = new JSZip();
+
+
+
+// library scanning
+let library = [];
+store.events.on("change", (key: string) => {
+  if(key == "gamePath") {
+    libraryScan()
+  }
+})
+function libraryScan() {
+  library = []
+  const gamePath = store.get("gamePath") as string;
+  console.log(`scanning: ${gamePath}`)
+  if (gamePath) {
+    fs.readdirSync(gamePath).forEach(async file => {
+      const zipfile = await zip.loadAsync(fs.readFileSync(path.join(gamePath, file)));
+      let tempChartFile = {} as Chart
+      for (const [name, file] of Object.entries(zipfile.files)) {
+        if (name.endsWith(".png")) {
+          tempChartFile.b64Cover = await file.async("base64");
+        }
+        if (name.endsWith(".json")) {
+          Object.assign(tempChartFile, JSON.parse(await file.async("string")) as Chart);
+        }
+      }
+      library.push(tempChartFile)
+    });
+  }
+}
+libraryScan()
+
+//handlers
 
 ipcMain.handle('request', async (_, axios_request: string | any) => {
   const result = await axios(axios_request)

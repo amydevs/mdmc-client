@@ -81,7 +81,6 @@
 
 <script lang="ts">
   import { Component, Prop, Vue } from 'vue-property-decorator'
-  import { Chart } from '@/modules/api'
 
   export default Vue.extend({
     name: 'Chart',

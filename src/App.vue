@@ -12,7 +12,7 @@
             <v-list-item
                 v-for="item in items"
                 :key="item.title"
-                dense
+                
                 router :to="item.route"
             >
               <v-list-item-icon>
@@ -25,6 +25,7 @@
           </v-list-item-group>
         </v-list>
     </v-navigation-drawer>
+    
     <v-app-bar
       app
       color="primary"
