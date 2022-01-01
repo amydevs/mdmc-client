@@ -33,7 +33,7 @@ contextBridge.exposeInMainWorld("electron", {
     },
     axios: {
         async get(url) {
-            return (await ipcRenderer.invoke("uest-get", url))
+            return (await ipcRenderer.invoke("request-get", url))
         }
     },
     store: {
