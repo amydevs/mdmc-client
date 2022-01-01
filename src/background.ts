@@ -96,7 +96,6 @@ import axios from "axios"
 import fs from 'fs';
 import { Chart } from '@/types/chart'
 import JSZip, { remove } from "jszip";
-const zip = new JSZip();
 
 import { API } from './modules/api'
 const api = new API();
@@ -120,6 +119,7 @@ function libraryScan() {
   if (gamePath) {
     fs.readdirSync(gamePath).forEach(async file => {
       if (file.endsWith(".mdm")) {
+        const zip = new JSZip();
         try {
           const localPath = path.join(gamePath, file);
           const zipfile = await zip.loadAsync(fs.readFileSync(localPath));
@@ -142,6 +142,7 @@ function libraryScan() {
         }
       }
     });
+    console.log(`scan complete: ${gamePath}`)
   }
 }
 
