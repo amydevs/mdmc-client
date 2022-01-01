@@ -33,7 +33,7 @@
       clipped-right
     >
       <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
-
+        <v-app-bar-title>{{ currentRouteName }}</v-app-bar-title>
       <v-spacer></v-spacer>
 
       <v-btn icon @click="downloadDrawer = !downloadDrawer">
@@ -84,5 +84,11 @@ export default Vue.extend({
         {icon: 'mdi-tools', title:'Library', route:'/library'}
     ],
   }),
+  computed: {
+      currentRouteName() {
+          return this.$route.name;
+      }
+  }
+
 });
 </script>
