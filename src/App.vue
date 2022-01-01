@@ -55,7 +55,7 @@
 
       <v-list dense>
         <v-list-item
-          v-for="item in $electron.downloads.getAll()"
+          v-for="item in downloads"
           :key="item.name"
         >
           {{ item.name }}
@@ -70,18 +70,22 @@
 <script lang="ts">
 import Vue from 'vue';
 import PathDialogue from '@/components/Misc/PathDialogue.vue'
+import { Chart } from './types/chart';
 
 export default Vue.extend({
   name: 'App',
   components: {
     PathDialogue
   },
-  async mounted() {
+  mounted() {
+    window.electron.ipc.receive('download-changed', (event:Chart[]) => {
+      this.$data.downloads = event;
+    });
   },
   data: () => ({
     drawer: false,
     downloadDrawer: false,
-    downloadI: [],
+    downloads: [],
     items: [
         {icon: 'mdi-home', title:'Home', route:'/'},
         {icon: 'mdi-tools', title:'Library', route:'/library'}
