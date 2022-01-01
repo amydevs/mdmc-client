@@ -175,7 +175,7 @@ ipcMain.on('open-dialog', (event) => {
 
 // download
 const axiosDownloadInst = axios.create({
-  baseURL: "https://mdmc.moe/api/download/",
+  baseURL: `${api.getChartDownloadBaseUrl()}`,
   timeout: 60000,
   responseType: "stream"
 });

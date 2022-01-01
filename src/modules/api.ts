@@ -7,8 +7,11 @@ export class API {
     async getCharts() {
         return (await window.electron.axios.get(`${this.basePath}api/data/charts`)).data as Chart[];
     }
+    getChartDownloadBaseUrl() {
+        return `${this.basePath}api/download/`;
+    }
     getChartDownloadUrl(id: number) {
-        return `${this.basePath}api/download/${id}`;
+        return `${this.getChartDownloadBaseUrl()}${id}`;
     }
     getCoverForChart(id: number) {
         return `${this.basePath}charts/${id}/cover.png`;
