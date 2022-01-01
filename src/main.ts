@@ -23,6 +23,9 @@ declare global {
         send: (channel: string, data?: any) => void;
         get: (channel: string, ...args: any[]) => void;
       },
+      downloads: {
+        getAll: () => import('async').DataContainer<Chart>[]
+      },
       library: {
         get: () => Chart[]
       }

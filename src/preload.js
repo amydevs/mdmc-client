@@ -18,6 +18,11 @@ contextBridge.exposeInMainWorld("electron", {
             ipcRenderer.on(channel, (event, ...args) => func(...args));
         }
     },
+    downloads: {
+        getAll: () => {
+            return ipcRenderer.sendSync('download-getAll') // adjust naming for your project
+        },
+    },
     library: {
         get: () => {
             return ipcRenderer.sendSync('library-get') // adjust naming for your project

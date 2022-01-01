@@ -55,10 +55,10 @@
 
       <v-list dense>
         <v-list-item
-          v-for="item in items"
-          :key="item.title"
+          v-for="item in downloadItems"
+          :key="item.name"
         >
-
+          {{ item.name }}
         </v-list-item>
       </v-list>
     </v-navigation-drawer>
@@ -77,6 +77,7 @@ export default Vue.extend({
     PathDialogue
   },
   async mounted() {
+    console.log(window.electron.downloads.getAll());
   },
   data: () => ({
     drawer: false,
@@ -89,6 +90,9 @@ export default Vue.extend({
   computed: {
     currentRouteName() {
       return this.$route.name;
+    },
+    downloadItems() {
+      return window.electron.downloads.getAll();
     }
   }
 
