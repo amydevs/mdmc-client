@@ -150,7 +150,7 @@ function libraryScan() {
 ipcMain.on('library-get', (event) => {
   event.returnValue = library;
 })
-ipcMain.handle('request', async (_, axios_request: string | any) => {
+ipcMain.handle('request-get', async (_, axios_request: string | any) => {
   const result = await axios(axios_request)
   return { data: result.data, status: result.status }
 })
@@ -163,7 +163,7 @@ ipcMain.on("electron-store-set", async (event, key, val) => {
   store.set(key, val);
 });
 
-ipcMain.on('open-dialog', (event) => {
+ipcMain.on('dialog-open', (event) => {
   try {
     event.returnValue = dialog.showOpenDialogSync({
       properties: ['openDirectory']

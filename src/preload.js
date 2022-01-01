@@ -25,7 +25,7 @@ contextBridge.exposeInMainWorld("electron", {
     },
     dialog: {
         openDialog: () => {
-            return ipcRenderer.sendSync('open-dialog') // adjust naming for your project
+            return ipcRenderer.sendSync('dialog-open') // adjust naming for your project
         },
     },
     fs: {
@@ -33,7 +33,7 @@ contextBridge.exposeInMainWorld("electron", {
     },
     axios: {
         async get(url) {
-            return (await ipcRenderer.invoke("request", url))
+            return (await ipcRenderer.invoke("uest-get", url))
         }
     },
     store: {
