@@ -6,6 +6,8 @@ import { createProtocol } from 'vue-cli-plugin-electron-builder/lib'
 import installExtension, { VUEJS_DEVTOOLS } from 'electron-devtools-installer'
 const isDevelopment = process.env.NODE_ENV !== 'production'
 
+let win: BrowserWindow;
+
 // Scheme must be registered before the app is ready
 protocol.registerSchemesAsPrivileged([
   { scheme: 'app', privileges: { secure: true, standard: true } }
@@ -13,7 +15,7 @@ protocol.registerSchemesAsPrivileged([
 
 async function createWindow() {
   // Create the browser window.
-  const win = new BrowserWindow({
+  win = new BrowserWindow({
     width: 800,
     height: 600,
     webPreferences: {
@@ -93,10 +95,14 @@ import axios from "axios"
 
 import fs from 'fs';
 import { Chart } from '@/types/chart'
-import JSZip from "jszip";
+import JSZip, { remove } from "jszip";
 const zip = new JSZip();
 
+import { API } from './modules/api'
+const api = new API();
+import uniqid from 'uniqid'
 
+import async from 'async';
 
 // library scanning
 let library: Chart[] = [];
@@ -157,3 +163,25 @@ ipcMain.on('open-dialog', (event) => {
     event.returnValue = null
   } 
 })
+
+// download
+let downloads: async.QueueObject<Chart> = async.queue(async (chart: Chart, callback) => {
+  var resp = await axios({
+    url: api.getChartDownloadUrl(chart.id as number),
+    method: "GET",
+    responseType: "stream",
+    onDownloadProgress: (progressEvent) => {
+      win.webContents.send("download-progress", Math.round((progressEvent.loaded * 100) / progressEvent.total)); // you can use this to show user percentage of file downloaded
+    }
+  })
+  // resp.data.pipe(fs.createWriteStream(download.path));
+}, 1);
+
+ipcMain.on("download-add", (event, chart: Chart) => {
+  console.log("Starting download of > " + chart.name);
+  downloads.push(chart);
+});
+
+ipcMain.on("download-getAll", (event, chart: Chart) => {
+  event.returnValue = downloads.workersList();
+});

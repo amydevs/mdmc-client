@@ -85,9 +85,9 @@ export default Vue.extend({
     ],
   }),
   computed: {
-      currentRouteName() {
-          return this.$route.name;
-      }
+    currentRouteName() {
+      return this.$route.name;
+    }
   }
 
 });
