@@ -12,3 +12,24 @@ new Vue({
   vuetify,
   render: h => h(App)
 }).$mount('#app')
+
+declare global {
+  interface Window {
+    electron: {
+      dialog: {
+        openDialog: () => string[] | null
+      },
+      fs: {
+        existsSync: (path: string) => boolean;
+      }
+      axios: {
+        get: (url: string) => { data: any; status: number; };
+      }
+      store: {
+        get: (key: string) => any;
+        set: (key: string, val: any) => void;
+        // any other methods you've defined...
+      };
+    };
+  }
+}

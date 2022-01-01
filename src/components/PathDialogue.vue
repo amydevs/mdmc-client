@@ -16,6 +16,9 @@
                 placeholder="C:\Program Files\Steam\steamapps\common\Muse Dash\"
                 class="mt-3"
                 outlined
+                append-icon="mdi-dots-horizontal-circle"
+                v-model="gamePath"
+                @click:append="openTDialog"
             ></v-text-field>
         </v-card-text>
 
@@ -26,7 +29,7 @@
           <v-btn
             color="primary"
             text
-            @click="dialog = false"
+            @click="exit"
           >
             Enter
           </v-btn>
@@ -41,10 +44,31 @@
     name: 'PathDialogue',
     data () {
       return {
+        gamePath: undefined,
         dialog: false,
       }
     },
     async mounted() {
+      if (!window.electron.fs.existsSync(window.electron.store.get("gamePath"))) {
+        this.dialog = true
+      }
+    },
+    methods: {
+      async openTDialog() {
+        const folders = window.electron.dialog.openDialog()
+        if (folders) {
+          this.$data.gamePath = folders[0]
+        }
+      },
+      async exit() {
+        if (window.electron.fs.existsSync(this.$data.gamePath)) {
+          window.electron.store.set("gamePath", this.$data.gamePath)
+          this.$data.dialog = false
+        }
+        else {
+          console.log("Invalid Path")
+        }
+      },
     }
   })
 </script>

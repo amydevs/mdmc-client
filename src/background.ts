@@ -1,6 +1,7 @@
 'use strict'
 
-import { app, protocol, BrowserWindow, ipcMain } from 'electron'
+import path from 'path'
+import { app, protocol, BrowserWindow, ipcMain, dialog } from 'electron'
 import { createProtocol } from 'vue-cli-plugin-electron-builder/lib'
 import installExtension, { VUEJS_DEVTOOLS } from 'electron-devtools-installer'
 const isDevelopment = process.env.NODE_ENV !== 'production'
@@ -21,8 +22,9 @@ async function createWindow() {
       // See nklayman.github.io/vue-cli-plugin-electron-builder/guide/security.html#node-integration for more info
       nodeIntegration: (process.env
           .ELECTRON_NODE_INTEGRATION as unknown) as boolean,
-      contextIsolation: !process.env.ELECTRON_NODE_INTEGRATION
-    }
+      contextIsolation: !process.env.ELECTRON_NODE_INTEGRATION,
+      preload: path.join(__dirname, "preload.js")
+    },
   })
 
   if (process.env.WEBPACK_DEV_SERVER_URL) {
@@ -81,9 +83,32 @@ if (isDevelopment) {
   }
 }
 
+import Store from "electron-store";
+
+const store = new Store();
+
 import axios from "axios"
 
 ipcMain.handle('request', async (_, axios_request: string | any) => {
   const result = await axios(axios_request)
   return { data: result.data, status: result.status }
+})
+
+// IPC listener
+ipcMain.on("electron-store-get", async (event, val) => {
+  event.returnValue = store.get(val);
+});
+ipcMain.on("electron-store-set", async (event, key, val) => {
+  store.set(key, val);
+});
+
+ipcMain.on('open-dialog', (event) => {
+  try {
+    event.returnValue = dialog.showOpenDialogSync({
+      properties: ['openDirectory']
+    })
+  }
+  catch {
+    event.returnValue = null
+  } 
 })

@@ -40,15 +40,19 @@
     <v-main>
       <router-view/>
     </v-main>
+    <PathDialogue />
   </v-app>
 </template>
 
 <script lang="ts">
 import Vue from 'vue';
+import PathDialogue from '@/components/PathDialogue.vue'
 
 export default Vue.extend({
   name: 'App',
-  
+  components: {
+    PathDialogue
+  },
   data: () => ({
     //
   }),

@@ -1,11 +1,10 @@
-import { ipcRenderer } from 'electron'
 export class API {
     basePath: string;
     constructor() {
         this.basePath = "https://mdmc.moe/";
     }
     async getCharts() {
-        return (await ipcRenderer.invoke("request", `${this.basePath}api/data/charts`)).data as Chart[];
+        return (await window.electron.axios.get(`${this.basePath}api/data/charts`)).data as Chart[];
     }
     async downloadChart(id: number) {
         // return (await got.get(`${this.basePath}api/download/${id}`)).body as string;
@@ -18,7 +17,7 @@ export class API {
 export interface Chart {
     name: string;
     author: string;
-    bpm: number;
+    bpm: number | string;
     scene: string;
     levelDesigner: string;
     levelDesigner1: string;

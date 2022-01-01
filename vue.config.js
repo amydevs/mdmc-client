@@ -4,7 +4,8 @@ module.exports = {
   ],
   pluginOptions: {
     electronBuilder: {
-      nodeIntegration: true
+      nodeIntegration: false,
+      preload: 'src/preload.js'
     }
   }
 }
