@@ -37,7 +37,7 @@
       <v-spacer></v-spacer>
 
       <v-btn icon @click="downloadDrawer = !downloadDrawer">
-        <v-icon>mdi-open-in-new</v-icon>
+        <v-icon>mdi-tray-arrow-down</v-icon>
       </v-btn>
     </v-app-bar>
 
