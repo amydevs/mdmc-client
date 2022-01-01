@@ -103,6 +103,7 @@ const api = new API();
 import uniqid from 'uniqid'
 
 import async from 'async';
+import { WriteStream } from 'original-fs'
 
 // library scanning
 let library: Chart[] = [];
@@ -165,20 +166,40 @@ ipcMain.on('open-dialog', (event) => {
 })
 
 // download
-let downloads: async.QueueObject<Chart> = async.queue(async (chart: Chart, callback) => {
-  var resp = await axios({
-    url: api.getChartDownloadUrl(chart.id as number),
-    method: "GET",
-    responseType: "stream",
-    onDownloadProgress: (progressEvent) => {
-      win.webContents.send("download-progress", Math.round((progressEvent.loaded * 100) / progressEvent.total)); // you can use this to show user percentage of file downloaded
-    }
-  })
-  // resp.data.pipe(fs.createWriteStream(download.path));
+const axiosDownloadInst = axios.create({ timeout: 60000 });
+let downloads: async.QueueObject<Chart> = async.queue((chart: Chart, cb) => {
+  try {
+    console.log("Starting Download > " + api.getChartDownloadUrl(chart.id as number));
+    axiosDownloadInst({
+      url: api.getChartDownloadUrl(chart.id as number),
+      responseType: 'arraybuffer'
+    }).then( resp => {
+      console.log(Buffer.from(resp.data, 'base64'))
+      cb()
+    })
+    // fetch(api.getChartDownloadUrl(chart.id as number)).then( async resp => {
+      // if (resp.body) {
+      //   const fswrite = fs.createWriteStream(path.join(store.get("gamePath") as string, chart.id + ".zip"));
+      //   const arrbuf = await resp.arrayBuffer();
+      //   fswrite.write(arrbuf);
+      //   fswrite.on("finish", () => {
+      //     cb()
+      //   })
+      // }
+    // })
+  }
+  catch {
+    console.error("Failed Download > " + chart.name);
+    cb(Error("Download failed"))
+  }
 }, 1);
 
+downloads.drain(() => {
+  console.log("All downloads finished");
+});
+
 ipcMain.on("download-add", (event, chart: Chart) => {
-  console.log("Starting download of > " + chart.name);
+  console.log("Added Download > " + chart.name);
   downloads.push(chart);
 });
 

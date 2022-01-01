@@ -77,7 +77,6 @@ export default Vue.extend({
     PathDialogue
   },
   async mounted() {
-    console.log(await window.electron.ipc.invoke('download-getAll'))
   },
   data: () => ({
     drawer: false,

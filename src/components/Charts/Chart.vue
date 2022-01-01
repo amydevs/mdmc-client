@@ -30,7 +30,7 @@
                 {{ chart.levelDesigner }}
                 <v-spacer></v-spacer>
                 <div v-if="!chart.isLocal">
-                    <v-btn icon>
+                    <v-btn icon @click="download">
                         <v-icon>mdi-download-circle</v-icon>
                     </v-btn>
                     <v-btn icon>
@@ -96,6 +96,11 @@
 
   export default Vue.extend({
     name: 'Chart',
-    props: ['chart']
+    props: ['chart'],
+    methods: {
+        download() {
+            window.electron.ipc.send('download-add', this.chart)
+        }
+    }
   })
 </script>
