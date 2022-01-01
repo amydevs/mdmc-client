@@ -111,9 +111,11 @@ function libraryScan() {
   console.log(`scanning: ${gamePath}`)
   if (gamePath) {
     fs.readdirSync(gamePath).forEach(async file => {
-      const zipfile = await zip.loadAsync(fs.readFileSync(path.join(gamePath, file)));
+      const localPath = path.join(gamePath, file);
+      const zipfile = await zip.loadAsync(fs.readFileSync(localPath));
       let tempChartFile = {
-        isLocal: true
+        isLocal: true,
+        localPath: localPath
       } as Chart
       for (const [name, file] of Object.entries(zipfile.files)) {
         if (name.endsWith(".png")) {
