@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <v-row class="justify-center">
-      <Chart v-for="chart in charts" :chart="chart" />
+      <Chart v-for="(chart, i) in charts" :chart="chart" :key="i" />
     </v-row>
   </v-container>
 </template>
