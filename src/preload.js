@@ -7,6 +7,17 @@ const {
 // the ipcRenderer without exposing the entire object
 
 contextBridge.exposeInMainWorld("electron", {
+    ipc: {
+        invoke: (channel, data) => {
+            return ipcRenderer.invoke(channel, data);
+        },
+        send: (channel, data) => {
+            return ipcRenderer.send(channel, data);
+        },
+        receive: (channel, func) => {
+            ipcRenderer.on(channel, (event, ...args) => func(...args));
+        }
+    },
     library: {
         get: () => {
             return ipcRenderer.sendSync('library-get') // adjust naming for your project

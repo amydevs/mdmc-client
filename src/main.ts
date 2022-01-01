@@ -18,6 +18,11 @@ new Vue({
 declare global {
   interface Window {
     electron: {
+      ipc: {
+        invoke: (channel: string, data?: any) => Promise<any>;
+        send: (channel: string, data?: any) => void;
+        get: (channel: string, ...args: any[]) => void;
+      },
       library: {
         get: () => Chart[]
       }
