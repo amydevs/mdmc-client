@@ -102,7 +102,8 @@ import { API } from './modules/api'
 const api = new API();
 import uniqid from 'uniqid'
 
-import async from 'async';
+import async, { doWhilst } from 'async'
+import getRawBody from 'raw-body'
 import { WriteStream } from 'original-fs'
 
 // library scanning
@@ -166,15 +167,22 @@ ipcMain.on('open-dialog', (event) => {
 })
 
 // download
-const axiosDownloadInst = axios.create({ timeout: 60000 });
+const axiosDownloadInst = axios.create({
+  baseURL: "https://mdmc.moe/api/download/",
+  timeout: 60000,
+  responseType: "stream"
+});
 let downloads: async.QueueObject<Chart> = async.queue((chart: Chart, cb) => {
   try {
     console.log("Starting Download > " + api.getChartDownloadUrl(chart.id as number));
-    axiosDownloadInst({
-      url: api.getChartDownloadUrl(chart.id as number),
-      responseType: 'arraybuffer'
-    }).then( resp => {
-      console.log(Buffer.from(resp.data, 'base64'))
+    axiosDownloadInst.get(`${chart.id}`).then( async resp => {
+      resp.data.on("data", function (chunk:Uint8Array) {
+        console.log(chunk.length)
+      });
+      const buf = Buffer.from(await getRawBody(resp.data, {
+        encoding: "ascii"
+      }), "base64")
+      fs.writeFileSync(path.join(store.get("gamePath") as string, chart.id + ".zip"), buf);
       cb()
     })
     // fetch(api.getChartDownloadUrl(chart.id as number)).then( async resp => {
