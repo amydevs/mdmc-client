@@ -119,21 +119,23 @@ function libraryScan() {
   console.log(`scanning: ${gamePath}`)
   if (gamePath) {
     fs.readdirSync(gamePath).forEach(async file => {
-      const localPath = path.join(gamePath, file);
-      const zipfile = await zip.loadAsync(fs.readFileSync(localPath));
-      let tempChartFile = {
-        isLocal: true,
-        localPath: localPath
-      } as Chart
-      for (const [name, file] of Object.entries(zipfile.files)) {
-        if (name.endsWith(".png")) {
-          tempChartFile.b64Cover = await file.async("base64");
+      if (file.endsWith(".mdm")) {
+        const localPath = path.join(gamePath, file);
+        const zipfile = await zip.loadAsync(fs.readFileSync(localPath));
+        let tempChartFile = {
+          isLocal: true,
+          localPath: localPath
+        } as Chart
+        for (const [name, file] of Object.entries(zipfile.files)) {
+          if (name.endsWith(".png")) {
+            tempChartFile.b64Cover = await file.async("base64");
+          }
+          if (name.endsWith(".json")) {
+            Object.assign(tempChartFile, JSON.parse(await file.async("string")) as Chart);
+          }
         }
-        if (name.endsWith(".json")) {
-          Object.assign(tempChartFile, JSON.parse(await file.async("string")) as Chart);
-        }
+        library.push(tempChartFile)
       }
-      library.push(tempChartFile)
     });
   }
 }
@@ -182,19 +184,9 @@ let downloads: async.QueueObject<Chart> = async.queue((chart: Chart, cb) => {
       const buf = Buffer.from(await getRawBody(resp.data, {
         encoding: "ascii"
       }), "base64")
-      fs.writeFileSync(path.join(store.get("gamePath") as string, chart.id + ".zip"), buf);
+      fs.writeFileSync(path.join(store.get("gamePath") as string, chart.id + ".mdm"), buf);
       cb()
     })
-    // fetch(api.getChartDownloadUrl(chart.id as number)).then( async resp => {
-      // if (resp.body) {
-      //   const fswrite = fs.createWriteStream(path.join(store.get("gamePath") as string, chart.id + ".zip"));
-      //   const arrbuf = await resp.arrayBuffer();
-      //   fswrite.write(arrbuf);
-      //   fswrite.on("finish", () => {
-      //     cb()
-      //   })
-      // }
-    // })
   }
   catch {
     console.error("Failed Download > " + chart.name);
