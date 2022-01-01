@@ -6,8 +6,8 @@ export class API {
     async getCharts() {
         return (await window.electron.axios.get(`${this.basePath}api/data/charts`)).data as Chart[];
     }
-    async downloadChart(id: number) {
-        // return (await got.get(`${this.basePath}api/download/${id}`)).body as string;
+    getChartDownloadUrl(id: number) {
+        return `${this.basePath}api/download/${id}`;
     }
     getCoverForChart(id: number) {
         return `${this.basePath}charts/${id}/cover.png`;

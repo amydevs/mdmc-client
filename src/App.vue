@@ -1,5 +1,30 @@
 <template>
   <v-app>
+    <v-navigation-drawer
+      v-model="drawer"
+      absolute
+      temporary
+    >
+      <v-list
+        dense nav
+      >
+        <v-list-item-group color='primary' mandatory>
+            <v-list-item
+                v-for="item in items"
+                :key="item.title"
+                dense
+                router :to="item.route"
+            >
+              <v-list-item-icon>
+                  <v-icon>{{ item.icon }}</v-icon>
+              </v-list-item-icon>
+              <v-list-item-title>
+                {{ item.title }}
+              </v-list-item-title>
+            </v-list-item>
+          </v-list-item-group>
+        </v-list>
+    </v-navigation-drawer>
     <v-app-bar
       app
       color="primary"
@@ -54,7 +79,11 @@ export default Vue.extend({
     PathDialogue
   },
   data: () => ({
-    //
+    drawer: true,
+    items: [
+        {icon: 'mdi-home', title:'Home', route:'/'},
+        {icon: 'mdi-tools', title:'Library', route:'/library'}
+    ],
   }),
 });
 </script>

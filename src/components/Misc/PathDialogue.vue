@@ -2,6 +2,7 @@
     <v-dialog
       v-model="dialog"
       width="500"
+      persistent
     >
 
       <v-card>
