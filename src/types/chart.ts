@@ -16,5 +16,6 @@ export interface Chart {
     id?: number;
 
     isLocal?: boolean;
+    localPath?: string;
     b64Cover?: string;
 }
