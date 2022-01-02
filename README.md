@@ -3,8 +3,9 @@
 ## To-Do
 - [x] Strengthening safety through ContextIsolation
 - [x] Finding and downloading charts using API from https://mdmc.moe/
-- [x] 
+- [x] Song Library Scanning and Management
 - [ ] Getting leaderboard scores using API from https://musedash.moe/
+- [ ] Advanced Steam Directory Detection
 
 ## Project setup
 ```
