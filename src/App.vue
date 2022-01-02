@@ -51,16 +51,43 @@
       app
       clipped
     >
-      <v-divider></v-divider>
-
-      <v-list dense>
-        <v-list-item
-          v-for="item in downloads"
-          :key="item.name"
-        >
-          {{ item.name }}
+      <v-list dense nav>
+      <template v-for="(item, index) in downloads">
+        <v-list-item :key="index">
+            <v-list-item-avatar>
+              <v-img :src="`https://mdmc.moe/charts/${item.id}/cover.png`"></v-img>
+            </v-list-item-avatar>
+            <v-list-item-content>
+              <v-list-item-title>{{ item.name }}</v-list-item-title>
+              <v-list-item-subtitle>{{ item.author }}</v-list-item-subtitle>
+            </v-list-item-content>
         </v-list-item>
+        <v-progress-linear
+          :value="perc"
+          class="mb-2"
+          rounded
+          v-if="index == 0"
+          :key="`${index}-divider`"
+        ></v-progress-linear>
+      </template>
       </v-list>
+
+      <!-- <v-list dense nav>
+          <v-list-item
+            v-for="(item, i) in downloads"
+            :key="i"
+          >
+            <v-list-item-avatar>
+              <v-img :src="`https://mdmc.moe/charts/${item.id}/cover.png`"></v-img>
+            </v-list-item-avatar>
+            <v-list-item-content>
+              <v-list-item-title>{{ item.name }}</v-list-item-title>
+              <v-list-item-subtitle>{{ item.author }}</v-list-item-subtitle>
+              <v-divider/>
+            </v-list-item-content>
+            
+          </v-list-item>
+      </v-list> -->
     </v-navigation-drawer>
 
     <PathDialogue />
@@ -81,16 +108,76 @@ export default Vue.extend({
     window.electron.ipc.receive('download-changed', (event:Chart[]) => {
       this.$data.downloads = event;
     });
+    window.electron.ipc.receive('download-prog', (len: number, perc: number) => {
+      this.$data.len = len;
+      this.$data.perc = perc;
+    });
   },
   data: () => ({
     drawer: false,
     downloadDrawer: false,
-    downloads: [],
+    len: 0,
+    perc: 0,
+    downloads: [
+      {
+        "name": "Cyaegha",
+        "author": "USAO",
+        "bpm": "200",
+        "scene": "scene_01",
+        "levelDesigner": "linaxia",
+        "levelDesigner1": "linaxia",
+        "levelDesigner2": "linaxia",
+        "levelDesigner3": "linaxia",
+        "levelDesigner4": "linaxia",
+        "difficulty1": "0",
+        "difficulty2": "11",
+        "difficulty3": "0",
+        "unlockLevel": "0",
+        "id": "10"
+      },
+      {
+        "name": "#1f1e33",
+        "author": "かめりあ(EDP)",
+        "bpm": "181",
+        "scene": "scene_03",
+        "levelDesigner": "000",
+        "levelDesigner1": "000",
+        "levelDesigner2": "000",
+        "levelDesigner3": "000",
+        "levelDesigner4": "000",
+        "difficulty1": "0",
+        "difficulty2": "11",
+        "difficulty3": "0",
+        "unlockLevel": "0",
+        "id": "1"
+      },
+      {
+        "name": "#1f1e33",
+        "author": "かめりあ(EDP)",
+        "bpm": "181",
+        "scene": "scene_03",
+        "levelDesigner": "000",
+        "levelDesigner1": "000",
+        "levelDesigner2": "000",
+        "levelDesigner3": "000",
+        "levelDesigner4": "000",
+        "difficulty1": "0",
+        "difficulty2": "11",
+        "difficulty3": "0",
+        "unlockLevel": "0",
+        "id": "1"
+      }
+    ],
     items: [
         {icon: 'mdi-home', title:'Home', route:'/'},
         {icon: 'mdi-tools', title:'Library', route:'/library'}
     ],
   }),
+  watch: {
+    ind: function(val:number) {
+      this.$data.ind = 0;
+    }
+  },
   computed: {
     currentRouteName() {
       return this.$route.name;

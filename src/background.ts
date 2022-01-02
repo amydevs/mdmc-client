@@ -185,8 +185,10 @@ let downloads: async.QueueObject<Chart> = async.queue((chart: Chart, cb) => {
   try {
     console.log("Starting Download > " + api.getChartDownloadUrl(chart.id as number));
     axiosDownloadInst.get(`${chart.id}`).then( async resp => {
+      var len = 0;
       resp.data.on("data", function (chunk:Uint8Array) {
-        console.log(chunk.length)
+        len += chunk.length;
+        win.webContents.send("download-prog", len, 100*(len/20971520))
       });
       const buf = Buffer.from(await getRawBody(resp.data, {
         encoding: "ascii"
