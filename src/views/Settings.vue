@@ -12,10 +12,12 @@
                     placeholder="C:\Program Files\Steam\steamapps\common\Muse Dash\"
                     class="mt-3"
                     outlined
+                    :hint="setting.hint"
                     append-icon="mdi-dots-horizontal-circle"
                     :rules="setting.rules"
                     v-model="setting.value"
                     hide-details="auto"
+                    @change="setting.cb"
                     @click:append="openTDialog(setting)"
                 ></v-text-field>
 
@@ -45,13 +47,18 @@
             type: 'directory',
             title: "Set Game Path",
             subtitle: "Set Your Muse Dash Game Path Here",
+            hint: "Please Press Enter After Typing in Your Path!",
+            cb(v: string) {
+              const existsBool = window.electron.fs.existsSync(v)
+              if (existsBool) {
+                console.log("Set Game Path")
+                window.electron.store.set("gamePath", v)
+                window.electron.ipc.send("library-scan", v)
+              }
+            },
             rules: [
               (v:string) => {
                 const existsBool = window.electron.fs.existsSync(v)
-                if (existsBool) {
-                  console.log("Set Game Path")
-                  window.electron.store.set("gamePath", v)
-                }
                 return existsBool || 'Game Path does not exist.'
               }
             ],
