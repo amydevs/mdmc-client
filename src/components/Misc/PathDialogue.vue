@@ -56,7 +56,7 @@
       }
     },
     async mounted() {
-      if (window.electron.fs.existsSync(window.electron.store.get("gamePath"))) {
+      if (!window.electron.fs.existsSync(window.electron.store.get("gamePath"))) {
         this.dialog = true
       }
     },
