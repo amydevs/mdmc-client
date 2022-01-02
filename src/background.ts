@@ -203,7 +203,7 @@ let downloads: async.QueueObject<Chart> = async.queue((chart: Chart, cb) => {
   console.log("Starting Download > " + api.getChartDownloadUrl(chart.id as number));
   axiosDownloadInst.get(`${chart.id}`).catch(err => {
     console.error(err);
-    cb(err)
+    cb()
   })
   .then(async (resp: any) => {
     var len = 0;
