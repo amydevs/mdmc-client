@@ -21,6 +21,7 @@
                 hide-details="auto"
                 append-icon="mdi-dots-horizontal-circle"
                 v-model="gamePath"
+                :rules="rules"
                 @click:append="openTDialog"
             ></v-text-field>
         </v-card-text>
@@ -47,12 +48,15 @@
     name: 'PathDialogue',
     data () {
       return {
-        gamePath: undefined,
+        gamePath: "C:\\Program Files\\Steam\\steamapps\\common\\Muse Dash\\",
         dialog: false,
+        rules: [
+          () => window.electron.fs.existsSync(this.$data.gamePath) || "Game Path Does Not Exist"
+        ]
       }
     },
     async mounted() {
-      if (!window.electron.fs.existsSync(window.electron.store.get("gamePath"))) {
+      if (window.electron.fs.existsSync(window.electron.store.get("gamePath"))) {
         this.dialog = true
       }
     },
@@ -63,7 +67,7 @@
           this.$data.gamePath = folders[0]
         }
       },
-      async exit() {
+      exit() {
         if (window.electron.fs.existsSync(this.$data.gamePath)) {
           window.electron.store.set("gamePath", this.$data.gamePath)
           this.$data.dialog = false
