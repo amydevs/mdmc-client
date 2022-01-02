@@ -188,7 +188,7 @@ let downloads: async.QueueObject<Chart> = async.queue((chart: Chart, cb) => {
       var len = 0;
       resp.data.on("data", function (chunk:Uint8Array) {
         len += chunk.length;
-        win.webContents.send("download-prog", len, 100*(len/20971520))
+        win.webContents.send("download-prog",  (len/(1024*1024)).toPrecision(3), 100*(len/20971520))
       });
       const buf = Buffer.from(await getRawBody(resp.data, {
         encoding: "ascii"

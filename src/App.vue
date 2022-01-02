@@ -59,7 +59,8 @@
             </v-list-item-avatar>
             <v-list-item-content>
               <v-list-item-title>{{ item.name }}</v-list-item-title>
-              <v-list-item-subtitle>{{ item.author }}</v-list-item-subtitle>
+              <v-list-item-subtitle v-if="index != 0">{{ item.author }}</v-list-item-subtitle>
+              <v-list-item-subtitle v-else>Downloaded {{ len }}MB</v-list-item-subtitle>
             </v-list-item-content>
         </v-list-item>
         <v-progress-linear
