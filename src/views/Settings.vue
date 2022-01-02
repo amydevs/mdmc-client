@@ -63,6 +63,7 @@
             subtitle: "Switch the Toggle to Enable Light Mode",
             value: window.electron.store.get('lightMode'),
             cb: (v:boolean) => {
+              this.$vuetify.theme.dark = !v;
               window.electron.store.set('lightMode', v)
             }
           }
