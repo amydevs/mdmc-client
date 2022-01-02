@@ -41,8 +41,10 @@
       </v-btn>
     </v-app-bar>
 
-    <v-main>
-      <router-view/>
+    <v-main class="">
+      <v-container>
+        <router-view/>
+      </v-container>
     </v-main>
 
     <v-navigation-drawer
@@ -193,3 +195,23 @@ export default Vue.extend({
 
 });
 </script>
+<style lang="scss">
+:root {
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: white;
+    border-radius: 4px;
+  }
+
+  ::-webkit-scrollbar-track-piece:start {
+    background: black;
+  }
+  ::-webkit-scrollbar-track-piece:end {
+    background: black;
+  }
+}
+
+</style>
