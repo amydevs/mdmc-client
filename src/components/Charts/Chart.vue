@@ -29,6 +29,7 @@
                     small
                     v-if="chart.difficulty1 != 0"
                     v-text="chart.difficulty1"
+                    @click="displayDetails = true"
                 />
                 <v-btn
                     class="black--text"
@@ -38,6 +39,7 @@
                     small
                     v-if="chart.difficulty2 != 0"
                     v-text="chart.difficulty2"
+                    @click="displayDetails = true"
                 />
                 <v-btn
                     class="black--text"
@@ -71,24 +73,31 @@
             </v-card-actions>
         </div>
     </div>
+    <Detail v-if="displayDetails" v-model="displayDetails" />
     </v-card>
 </template>
 
 <script lang="ts">
-  import AppView from '@/App.vue';
   import { Component, Prop, Vue } from 'vue-property-decorator'
   import { API } from '@/modules/api'
   import { Chart } from '@/types/chart';
+
+  import Detail from '@/components/Charts/Detail.vue';
+
 
   const api = new API()
 
   export default Vue.extend({
     name: 'Chart',
     props: ['chart'],
+    components: {
+      Detail
+    },
     data() {
       return {
         audio: null,
         audioPaused: true,
+        displayDetails: false
       }
     },
     methods: {
