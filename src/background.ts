@@ -163,8 +163,9 @@ ipcMain.on('library-scan', (event) => {
 })
 ipcMain.on('library-delete', (event, fileName) => {
   const filePath = path.join(store.get("gamePath") as string, fileName);
-  fs.unlinkSync(filePath);
-  libraryScan();
+  fs.unlink(filePath, () => {
+    libraryScan();
+  });
 })
 ipcMain.handle('request-get', async (_, axios_request: string | any) => {
   const result = await axios(axios_request)
