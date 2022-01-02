@@ -73,7 +73,7 @@
             </v-card-actions>
         </div>
     </div>
-    <Detail v-if="displayDetails" v-model="displayDetails" />
+    <Detail v-if="displayDetails" v-model="displayDetails" :chart="addIdFromLocal(chart)" />
     </v-card>
 </template>
 
@@ -102,18 +102,18 @@
     },
     methods: {
         async addIdFromLocal(chart:Chart) {
-            const charts = await api.getCharts();
-            const foundChart = charts.find(c => (c.name === chart.name))
-            if (foundChart) {
-                chart.id = foundChart.id
+            if (chart.isLocal) {
+                const charts = await api.getCharts();
+                const foundChart = charts.find(c => (c.name === chart.name))
+                if (foundChart) {
+                    chart.id = foundChart.id
+                }
             }
             return chart
         },
         async download() {
             var chart = this.chart as Chart
-            if (chart.isLocal) {
-                chart = await this.addIdFromLocal(chart)
-            }
+            chart = await this.addIdFromLocal(chart)
             window.electron.ipc.send('download-add', chart)
         },
         deleteC() {
