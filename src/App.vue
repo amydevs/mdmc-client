@@ -42,7 +42,9 @@
     </v-app-bar>
 
     <v-main class="">
-      <router-view/>
+      <keep-alive include="Home">
+        <router-view :key="$route.fullPath" />
+      </keep-alive>
     </v-main>
 
     <v-navigation-drawer
