@@ -38,16 +38,20 @@
         const len = (this.$data as any).search.length as number
         
         var returnVal = this.charts as Chart[]
-        if (len !== 0) {
-          const lowercaseSearch = this.$data.search.toLowerCase()
-          returnVal = returnVal.filter(chart => {
-            return (
+        
+        const lowercaseSearch = this.$data.search.toLowerCase()
+        returnVal = returnVal.filter(chart => {
+          var searchBool = true
+          if (len !== 0) {
+            searchBool =  (
               chart.name.toLowerCase().includes(lowercaseSearch) ||
               chart.author.toLowerCase().includes(lowercaseSearch) ||
               chart.levelDesigner.toLowerCase().includes(lowercaseSearch)
             )
-          })
-        }
+          }
+          
+          return searchBool
+        })
 
         return returnVal
       }
