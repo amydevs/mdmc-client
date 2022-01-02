@@ -199,25 +199,23 @@ const axiosDownloadInst = axios.create({
 });
 let downloads: async.QueueObject<Chart> = async.queue((chart: Chart, cb) => {
   win.webContents.send("download-changed", getAllDownloads())
-  try {
-    console.log("Starting Download > " + api.getChartDownloadUrl(chart.id as number));
-    axiosDownloadInst.get(`${chart.id}`).then( async resp => {
-      var len = 0;
-      resp.data.on("data", function (chunk:Uint8Array) {
-        len += chunk.length;
-        win.webContents.send("download-prog",  (len/(1024*1024)).toPrecision(3), 100*(len/20971520))
-      });
-      const buf = Buffer.from(await getRawBody(resp.data, {
-        encoding: "ascii"
-      }), "base64")
-      fs.writeFileSync(path.join(store.get("gamePath") as string, chart.name + ".mdm"), buf);
-      cb()
-    })
-  }
-  catch {
-    console.error("Failed Download > " + chart.name);
-    cb(Error("Download failed"))
-  }
+  console.log("Starting Download > " + api.getChartDownloadUrl(chart.id as number));
+  axiosDownloadInst.get(`${chart.id}`).catch(err => {
+    console.error(err);
+    cb(err)
+  })
+  .then(async (resp: any) => {
+    var len = 0;
+    resp.data.on("data", function (chunk:Uint8Array) {
+      len += chunk.length;
+      win.webContents.send("download-prog",  (len/(1024*1024)).toPrecision(3), 100*(len/20971520))
+    });
+    const buf = Buffer.from(await getRawBody(resp.data, {
+      encoding: "ascii"
+    }), "base64")
+    fs.writeFileSync(path.join(store.get("gamePath") as string, chart.name + ".mdm"), buf);
+    cb()
+  })
 }, 1);
 
 downloads.drain(() => {
