@@ -15,11 +15,39 @@
             />
         </v-avatar>
         <div class="flex-grow-1">
-            <v-card-actions class="py-0">
-                <v-btn icon>
-                <v-icon>mdi-timer</v-icon>
+            <v-card-actions class="pb-0">
+                <v-btn rounded small>
+                    <v-icon class="mr-1">mdi-timer</v-icon>
+                    {{chart.bpm}} BPM
                 </v-btn>
-                {{chart.bpm}} BPM
+                <v-spacer />
+                <v-btn
+                    class="black--text"
+                    rounded
+                    color="green accent-3"
+                    dark
+                    small
+                    v-if="chart.difficulty1 != 0"
+                    v-text="chart.difficulty1"
+                />
+                <v-btn
+                    class="black--text"
+                    rounded
+                    color="blue accent-2"
+                    dark
+                    small
+                    v-if="chart.difficulty2 != 0"
+                    v-text="chart.difficulty2"
+                />
+                <v-btn
+                    class="black--text"
+                    rounded
+                    color="purple accent-3"
+                    dark
+                    small
+                    v-if="chart.difficulty3 != 0"
+                    v-text="chart.difficulty3"
+                />
             </v-card-actions>
             <v-card-title v-text="chart.name"></v-card-title>
             <v-card-subtitle v-text="chart.author"></v-card-subtitle>
