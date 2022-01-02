@@ -9,7 +9,24 @@
             outlined
             clearable
             hide-details
-          ></v-text-field>
+        ></v-text-field>
+        <div class="d-flex justify-space-between mx-1">
+          <v-switch
+            label="Show Easy"
+            v-model="show.easy"
+            hide-details
+          ></v-switch>
+          <v-switch
+            label="Show Hard"
+            v-model="show.hard"
+            hide-details
+          ></v-switch>
+          <v-switch
+            label="Show Master"
+            v-model="show.master"
+            hide-details
+          ></v-switch>
+        </div>
       </v-card>
       <ChartComp v-for="(chart, i) in searchFilter" :chart="chart" :key="i" />
     </v-row>
@@ -27,6 +44,11 @@
     data() {
       return {
         search: '',
+        show: {
+          easy: true,
+          hard: true,
+          master: true
+        }
       }
     },
     components: {
@@ -49,8 +71,13 @@
               chart.levelDesigner.toLowerCase().includes(lowercaseSearch)
             )
           }
-          
-          return searchBool
+
+          // vae
+          return searchBool && (
+            (this.$data.show.easy ?  (chart.difficulty1 != 0) : false) ||
+            (this.$data.show.hard ?  (chart.difficulty2 != 0) : false) ||
+            (this.$data.show.master ?  (chart.difficulty3 != 0) : false)
+          )
         })
 
         return returnVal
