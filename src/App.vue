@@ -42,10 +42,8 @@
     </v-app-bar>
 
     <v-main class="">
-      <v-container>
-        <router-view/>
-      </v-container>
-    </v-main>
+      <router-view/>
+=    </v-main>
 
     <v-navigation-drawer
       v-model="downloadDrawer"
