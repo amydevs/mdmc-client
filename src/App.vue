@@ -171,7 +171,8 @@ export default Vue.extend({
     ],
     items: [
         {icon: 'mdi-home', title:'Home', route:'/'},
-        {icon: 'mdi-tools', title:'Library', route:'/library'}
+        {icon: 'mdi-tools', title:'Library', route:'/library'},
+        {icon: 'mdi-cog', title:'Settings', route:'/settings'}
     ],
   }),
   watch: {
