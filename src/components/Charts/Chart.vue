@@ -16,7 +16,7 @@
         </v-avatar>
         <div class="flex-grow-1">
             <v-card-actions class="pb-0">
-                <v-btn rounded small>
+                <v-btn rounded small depressed color="transparent">
                     <v-icon class="mr-1">mdi-timer</v-icon>
                     {{chart.bpm}} BPM
                 </v-btn>
