@@ -100,7 +100,6 @@ import JSZip, { remove } from "jszip";
 
 import { API } from './modules/api'
 const api = new API();
-import uniqid from 'uniqid'
 
 import async, { doWhilst } from 'async'
 import getRawBody from 'raw-body'
