@@ -1,5 +1,12 @@
 <template>
+<div class="text-center">
   <ChartsContainer :charts="charts" />
+  <v-progress-circular
+    v-if="!loaded"
+    :size="50"
+    indeterminate
+  ></v-progress-circular>
+</div>
 </template>
 
 <script lang="ts">
@@ -17,11 +24,13 @@
     },
     data() {
       return {
+        loaded: false,
         charts: []
       }
     },
     async mounted() {
       this.$data.charts = await api.getCharts();
+      this.$data.loaded = true;
     }
   })
 </script>
