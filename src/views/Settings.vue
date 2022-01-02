@@ -20,6 +20,12 @@
                 ></v-text-field>
 
               </v-list-item-content>
+              <v-switch
+                v-if="setting.type == 'bool'"
+                v-model="setting.value"
+                @change="setting.cb"
+                flat
+              ></v-switch>
           </v-list-item>
           <v-divider v-if="settings.length-1 !== i" :key="`divfor-${i}`"/>
         </template>
@@ -50,6 +56,15 @@
               }
             ],
             value: window.electron.store.get('gamePath'),
+          },
+          {
+            type: "bool",
+            title: "Enable Light Mode",
+            subtitle: "Switch the Toggle to Enable Light Mode",
+            value: window.electron.store.get('lightMode'),
+            cb: (v:boolean) => {
+              window.electron.store.set('lightMode', v)
+            }
           }
         ]
       }
