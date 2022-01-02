@@ -15,6 +15,7 @@
                     append-icon="mdi-dots-horizontal-circle"
                     :rules="setting.rules"
                     v-model="setting.value"
+                    hide-details="auto"
                     @click:append="openTDialog(setting)"
                 ></v-text-field>
 
