@@ -147,8 +147,8 @@ function libraryScan() {
         catch {
           console.error(`failed to load chart: ${file}`)
         }
-        if (i === files.length -1) cb();
       }
+      if (i === files.length -1) cb();
     });
     if (0 === files.length) cb()
   }
@@ -209,7 +209,7 @@ let downloads: async.QueueObject<Chart> = async.queue((chart: Chart, cb) => {
       const buf = Buffer.from(await getRawBody(resp.data, {
         encoding: "ascii"
       }), "base64")
-      fs.writeFileSync(path.join(store.get("gamePath") as string, chart.id + ".mdm"), buf);
+      fs.writeFileSync(path.join(store.get("gamePath") as string, chart.name + ".mdm"), buf);
       cb()
     })
   }
