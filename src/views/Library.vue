@@ -6,6 +6,7 @@
   import Vue from 'vue'
   import ChartsContainer from '../components/Charts/ChartsContainer.vue'
   import { API } from '@/modules/api'
+  import { Chart } from '@/types/chart'
 
   const api = new API()
 
@@ -21,6 +22,9 @@
       }
     },
     async mounted() {
+      window.electron.ipc.receive("library-update", (event:Chart[]) => {
+        this.$data.charts = event;
+      });
       this.$data.charts = window.electron.library.get();
     }
   })

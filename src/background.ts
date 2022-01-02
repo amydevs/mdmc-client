@@ -142,6 +142,7 @@ function libraryScan() {
         }
       }
     });
+    win.webContents.send("library-update", library);
     console.log(`scan complete: ${gamePath}`)
   }
 }
@@ -150,9 +151,13 @@ function libraryScan() {
 ipcMain.on('library-get', (event) => {
   event.returnValue = library;
 })
+ipcMain.on('library-scan', (event) => {
+  libraryScan()
+})
 ipcMain.on('library-delete', (event, fileName) => {
   const filePath = path.join(store.get("gamePath") as string, fileName);
   fs.unlinkSync(filePath);
+  libraryScan();
 })
 ipcMain.handle('request-get', async (_, axios_request: string | any) => {
   const result = await axios(axios_request)
