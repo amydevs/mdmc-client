@@ -1,4 +1,6 @@
 import { Chart } from '@/types/chart'
+import { Score } from '@/types/score';
+
 export class API {
     basePath: string;
     constructor() {
@@ -18,5 +20,15 @@ export class API {
     }
     getCoverForChart(id: number) {
         return `${this.basePath}charts/${id}/cover.png`;
+    }
+}
+
+export class LeaderboardsAPI {
+    basePath: string;
+    constructor() {
+        this.basePath = "https://api.musedash.moe/";
+    }
+    async getScoresForChart(chardID: number, difficulty: number) {
+        return (await window.electron.axios.get(`${this.basePath}mdmc/chart/${chardID}/${difficulty}`)).data as Score[];
     }
 }
