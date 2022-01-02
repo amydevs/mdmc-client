@@ -72,14 +72,14 @@
             )
           }
 
-          // vae
+          // Filter by difficulty
           return searchBool && (
             (this.$data.show.easy ?  (chart.difficulty1 != 0) : false) ||
             (this.$data.show.hard ?  (chart.difficulty2 != 0) : false) ||
             (this.$data.show.master ?  (chart.difficulty3 != 0) : false)
           )
         })
-
+        console.log(returnVal)
         return returnVal
       }
     }
