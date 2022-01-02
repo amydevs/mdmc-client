@@ -114,7 +114,6 @@ store.events.on("change", (key: string) => {
 })
 function libraryScan() {
   const cb = () => {
-    console.log(library)
     win.webContents.send("library-update", library);
     console.log(`scan complete: ${gamePath}`)
     return;
@@ -151,7 +150,7 @@ function libraryScan() {
         if (i === files.length -1) cb();
       }
     });
-    cb()
+    if (0 === files.length) cb()
   }
 }
 
