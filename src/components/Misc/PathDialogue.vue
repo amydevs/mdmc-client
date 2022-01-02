@@ -6,10 +6,11 @@
     >
 
       <v-card>
-        <v-card-title class="text-h5 grey lighten-2">
-          Set Game Path
-        </v-card-title>
-
+        <v-toolbar
+          color="primary"
+          dark
+          class="text-h5"
+        >Set Game Path</v-toolbar>
         <v-card-text class="pt-3">
             Your Muse Dash path is not set. Please set it here:
             <v-text-field
@@ -17,6 +18,7 @@
                 placeholder="C:\Program Files\Steam\steamapps\common\Muse Dash\"
                 class="mt-3"
                 outlined
+                hide-details="auto"
                 append-icon="mdi-dots-horizontal-circle"
                 v-model="gamePath"
                 @click:append="openTDialog"
@@ -50,7 +52,7 @@
       }
     },
     async mounted() {
-      if (!window.electron.fs.existsSync(window.electron.store.get("gamePath"))) {
+      if (window.electron.fs.existsSync(window.electron.store.get("gamePath"))) {
         this.dialog = true
       }
     },
