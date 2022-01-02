@@ -1,6 +1,6 @@
 <template>
     <v-dialog v-model="display">
-        <template v-slot:default="dialog">
+        <template>
           <v-card>
             <v-toolbar
               color="primary"
