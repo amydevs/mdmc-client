@@ -13,6 +13,9 @@ export class API {
     getChartDownloadUrl(id: number) {
         return `${this.getChartDownloadBaseUrl()}${id}`;
     }
+    getDemoForChart(id: number) {
+        return `${this.basePath}charts/${id}/demo.mp3`;
+    }
     getCoverForChart(id: number) {
         return `${this.basePath}charts/${id}/cover.png`;
     }

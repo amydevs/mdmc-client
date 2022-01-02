@@ -10,7 +10,7 @@
                 tile
             >
             <v-img 
-                :src="chart.isLocal ? `data:image/png;base64, ${chart.b64Cover}` : `https://mdmc.moe/charts/${chart.id}/cover.png`" 
+                :src="chart.isLocal ? `data:image/png;base64, ${chart.b64Cover}` : getImgUrl()" 
                 :alt="chart.name"
             />
         </v-avatar>
@@ -29,20 +29,15 @@
                 </v-btn>
                 {{ chart.levelDesigner }}
                 <v-spacer></v-spacer>
-                <div v-if="!chart.isLocal">
-                    <v-btn icon @click="download">
+                <div>
+                    <v-btn icon v-if="!chart.isLocal" @click="download">
                         <v-icon>mdi-download-circle</v-icon>
                     </v-btn>
-                    <v-btn icon>
-                        <v-icon>mdi-play-circle</v-icon>
-                    </v-btn>
-                </div>
-                <div v-else>
-                    <v-btn icon @click="deleteC">
+                    <v-btn icon v-else @click="deleteC">
                         <v-icon>mdi-delete-circle</v-icon>
                     </v-btn>
-                    <v-btn icon>
-                        <v-icon>mdi-play-circle</v-icon>
+                    <v-btn icon @click="togglePlay">
+                        <v-icon>{{audioPaused ? 'mdi-play-circle' : 'mdi-pause-circle'}}</v-icon>
                     </v-btn>
                 </div>
             </v-card-actions>
@@ -92,18 +87,50 @@
 </template>
 
 <script lang="ts">
+  import AppView from '@/App.vue';
   import { Component, Prop, Vue } from 'vue-property-decorator'
+  import { API } from '@/modules/api'
+
+  const api = new API()
 
   export default Vue.extend({
     name: 'Chart',
     props: ['chart'],
+    data() {
+      return {
+        audio: null,
+        audioPaused: true,
+      }
+    },
     methods: {
         download() {
             window.electron.ipc.send('download-add', this.chart)
         },
         deleteC() {
             window.electron.library.delete(this.chart.localPath)
+        },
+        togglePlay() {
+            if (this.$data.audio == undefined) {
+                this.$data.audio = new Audio(this.getDemoUrl())
+            }
+            const audio = this.$data.audio as HTMLAudioElement;
+            
+            if (audio.paused) {
+                audio.play();
+                this.$data.audioPaused = false;
+            } else {
+                audio.pause();
+                this.$data.audioPaused = true;
+            }
+        },
+        getImgUrl() {
+            return api.getCoverForChart(this.chart.id);
+        },
+        getDemoUrl() {
+            return api.getDemoForChart(this.chart.id);
         }
+    },
+    computed: {
     }
-  })
+})
 </script>
