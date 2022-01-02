@@ -54,7 +54,7 @@
       clipped
     >
       <v-list dense nav>
-        <v-list-item class="text-center">
+        <v-list-item class="text-center" v-if="downloads.length == 0">
           <v-list-item-subtitle>
             No Charts in the Download Queue...
           </v-list-item-subtitle>
@@ -198,20 +198,21 @@ export default Vue.extend({
 <style lang="scss">
 :root {
   ::-webkit-scrollbar {
-    width: 8px;
+    width: 10px;
   }
-
+  ::-webkit-scrollbar-corner {
+      background: rgba(0,0,0,0);
+  }
   ::-webkit-scrollbar-thumb {
-    background: white;
-    border-radius: 4px;
+      background-color: white;
+      border-radius: 10px;
+      min-width: 32px;
+      min-height: 32px;
   }
-
-  ::-webkit-scrollbar-track-piece:start {
-    background: black;
-  }
-  ::-webkit-scrollbar-track-piece:end {
-    background: black;
+  ::-webkit-scrollbar-track {
+      background-color: #272727;
   }
 }
+
 
 </style>
