@@ -29,6 +29,7 @@ declare global {
       },
       library: {
         get: () => Chart[]
+        delete: (fileName: string) => void
       }
       dialog: {
         openDialog: () => string[] | null

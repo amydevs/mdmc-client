@@ -27,6 +27,9 @@ contextBridge.exposeInMainWorld("electron", {
         get: () => {
             return ipcRenderer.sendSync('library-get') // adjust naming for your project
         },
+        delete: (fileName) => {
+            ipcRenderer.send('library-delete', fileName) // adjust naming for your project
+        }
     },
     dialog: {
         openDialog: () => {

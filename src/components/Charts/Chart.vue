@@ -38,7 +38,7 @@
                     </v-btn>
                 </div>
                 <div v-else>
-                    <v-btn icon>
+                    <v-btn icon @click="deleteC">
                         <v-icon>mdi-delete-circle</v-icon>
                     </v-btn>
                     <v-btn icon>
@@ -100,6 +100,9 @@
     methods: {
         download() {
             window.electron.ipc.send('download-add', this.chart)
+        },
+        deleteC() {
+            window.electron.library.delete(this.chart.localPath)
         }
     }
   })
