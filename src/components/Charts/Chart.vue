@@ -58,13 +58,13 @@
                 {{ chart.levelDesigner }}
                 <v-spacer></v-spacer>
                 <div>
-                    <v-btn icon v-if="!chart.isLocal" @click="download">
-                        <v-icon>mdi-download-circle</v-icon>
+                    <v-btn icon @click="download">
+                        <v-icon>{{!chart.isLocal ? 'mdi-download-circle' : 'mdi-refresh-circle'}}</v-icon>
                     </v-btn>
-                    <v-btn icon v-else @click="deleteC">
+                    <v-btn icon v-if="chart.isLocal" @click="deleteC">
                         <v-icon>mdi-delete-circle</v-icon>
                     </v-btn>
-                    <v-btn icon @click="togglePlay">
+                    <v-btn icon v-else @click="togglePlay">
                         <v-icon>{{audioPaused ? 'mdi-play-circle' : 'mdi-pause-circle'}}</v-icon>
                     </v-btn>
                 </div>
@@ -78,6 +78,7 @@
   import AppView from '@/App.vue';
   import { Component, Prop, Vue } from 'vue-property-decorator'
   import { API } from '@/modules/api'
+  import { Chart } from '@/types/chart';
 
   const api = new API()
 
@@ -91,8 +92,20 @@
       }
     },
     methods: {
-        download() {
-            window.electron.ipc.send('download-add', this.chart)
+        async addIdFromLocal(chart:Chart) {
+            const charts = await api.getCharts();
+            const foundChart = charts.find(c => (c.name === chart.name))
+            if (foundChart) {
+                chart.id = foundChart.id
+            }
+            return chart
+        },
+        async download() {
+            var chart = this.chart as Chart
+            if (chart.isLocal) {
+                chart = await this.addIdFromLocal(chart)
+            }
+            window.electron.ipc.send('download-add', chart)
         },
         deleteC() {
             window.electron.library.delete(this.chart.localPath)
