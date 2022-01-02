@@ -125,7 +125,7 @@ function libraryScan() {
           const zipfile = await zip.loadAsync(fs.readFileSync(localPath));
           let tempChartFile = {
             isLocal: true,
-            localPath: localPath
+            localPath: file
           } as Chart
           for (const [name, file] of Object.entries(zipfile.files)) {
             if (name.endsWith(".png")) {
@@ -149,6 +149,10 @@ function libraryScan() {
 //handlers
 ipcMain.on('library-get', (event) => {
   event.returnValue = library;
+})
+ipcMain.on('library-delete', (event, fileName) => {
+  const filePath = path.join(store.get("gamePath") as string, fileName);
+  fs.unlinkSync(filePath);
 })
 ipcMain.handle('request-get', async (_, axios_request: string | any) => {
   const result = await axios(axios_request)
