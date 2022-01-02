@@ -43,7 +43,7 @@
 
     <v-main class="">
       <router-view/>
-=    </v-main>
+    </v-main>
 
     <v-navigation-drawer
       v-model="downloadDrawer"
