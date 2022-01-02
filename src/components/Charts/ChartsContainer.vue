@@ -79,7 +79,6 @@
             (this.$data.show.master ?  (chart.difficulty3 != 0) : false)
           )
         })
-        console.log(returnVal)
         return returnVal
       }
     }
