@@ -52,25 +52,30 @@
       clipped
     >
       <v-list dense nav>
-      <template v-for="(item, index) in downloads">
-        <v-list-item :key="index">
-            <v-list-item-avatar>
-              <v-img :src="`https://mdmc.moe/charts/${item.id}/cover.png`"></v-img>
-            </v-list-item-avatar>
-            <v-list-item-content>
-              <v-list-item-title>{{ item.name }}</v-list-item-title>
-              <v-list-item-subtitle v-if="index != 0">{{ item.author }}</v-list-item-subtitle>
-              <v-list-item-subtitle v-else>Downloaded {{ len }}MB</v-list-item-subtitle>
-            </v-list-item-content>
+        <v-list-item class="text-center">
+          <v-list-item-subtitle>
+            No Charts in the Download Queue...
+          </v-list-item-subtitle>
         </v-list-item>
-        <v-progress-linear
-          :value="perc"
-          class="mb-2"
-          rounded
-          v-if="index == 0"
-          :key="`${index}-divider`"
-        ></v-progress-linear>
-      </template>
+        <template v-for="(item, index) in downloads">
+          <v-list-item :key="index">
+              <v-list-item-avatar>
+                <v-img :src="`https://mdmc.moe/charts/${item.id}/cover.png`"></v-img>
+              </v-list-item-avatar>
+              <v-list-item-content>
+                <v-list-item-title>{{ item.name }}</v-list-item-title>
+                <v-list-item-subtitle v-if="index != 0">{{ item.author }}</v-list-item-subtitle>
+                <v-list-item-subtitle v-else>Downloaded {{ len }}MB</v-list-item-subtitle>
+              </v-list-item-content>
+          </v-list-item>
+          <v-progress-linear
+            :value="perc"
+            class="mb-2"
+            rounded
+            v-if="index == 0"
+            :key="`${index}-divider`"
+          ></v-progress-linear>
+        </template>
       </v-list>
 
       <!-- <v-list dense nav>
