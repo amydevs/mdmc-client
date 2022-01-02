@@ -113,11 +113,19 @@ store.events.on("change", (key: string) => {
   }
 })
 function libraryScan() {
+  const cb = () => {
+    console.log(library)
+    win.webContents.send("library-update", library);
+    console.log(`scan complete: ${gamePath}`)
+    return;
+  }
+
   library = []
   const gamePath = store.get("gamePath") as string;
   console.log(`scanning: ${gamePath}`)
   if (gamePath) {
-    fs.readdirSync(gamePath).forEach(async file => {
+    const files = fs.readdirSync(gamePath)
+    files.forEach(async (file, i) => {
       if (file.endsWith(".mdm")) {
         const zip = new JSZip();
         try {
@@ -140,10 +148,10 @@ function libraryScan() {
         catch {
           console.error(`failed to load chart: ${file}`)
         }
+        if (i === files.length -1) cb();
       }
     });
-    win.webContents.send("library-update", library);
-    console.log(`scan complete: ${gamePath}`)
+    cb()
   }
 }
 
@@ -215,6 +223,7 @@ let downloads: async.QueueObject<Chart> = async.queue((chart: Chart, cb) => {
 downloads.drain(() => {
   win.webContents.send("download-changed", getAllDownloads())
   console.log("All downloads finished");
+  libraryScan();
 });
 
 ipcMain.on("download-add", (event, chart: Chart) => {

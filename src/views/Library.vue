@@ -24,6 +24,7 @@
     async mounted() {
       window.electron.ipc.receive("library-update", (event:Chart[]) => {
         this.$data.charts = event;
+        console.log(event)
       });
       this.$data.charts = window.electron.library.get();
     }
