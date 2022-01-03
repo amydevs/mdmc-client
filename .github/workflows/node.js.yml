@@ -28,4 +28,8 @@ jobs:
         cache: 'yarn'
     - run: yarn --immutable --prefer-offline
     - run: yarn electron:build
-    - run: tree /F
+    - name: 'Upload Artifact'
+      uses: actions/upload-artifact@v2
+      with:
+        name: mdmc-client installer
+        path: ./dist_electron/*.exe
