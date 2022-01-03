@@ -60,7 +60,7 @@
                 </v-btn>
                 {{ chart.levelDesigner }}
                 <v-spacer></v-spacer>
-                <div>
+                <div class="d-flex">
                     <v-btn icon @click="download">
                         <v-icon>{{!chart.isLocal ? 'mdi-download-circle' : 'mdi-refresh-circle'}}</v-icon>
                     </v-btn>
