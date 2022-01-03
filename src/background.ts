@@ -235,9 +235,9 @@ downloads.drain(() => {
 });
 
 ipcMain.on("download-add", (event, chart: Chart) => {
-  win.webContents.send("download-changed", getAllDownloads())
   console.log("Added Download > " + chart.name);
   downloads.push(chart);
+  win.webContents.send("download-changed", getAllDownloads())
 });
 
 ipcMain.on("download-getAll", (event) => {
