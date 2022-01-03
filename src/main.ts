@@ -19,6 +19,9 @@ new Vue({
 declare global {
   interface Window {
     electron: {
+      shell: {
+        openExternalPlayer: (id: string) => void
+      },
       ipc: {
         invoke: (channel: string, data?: any) => Promise<any>;
         send: (channel: string, data?: any) => void;

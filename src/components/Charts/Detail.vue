@@ -49,7 +49,7 @@
                     <tbody>
                        <tr v-for="(score, i) in filteredLeaderboard" :key="i">
                         <td>{{score[ScoreEnum.Index]+1}}</td>
-                        <td><a :href="`https://musedash.moe/mdmc/player/${score[ScoreEnum.Username]}`">{{score[ScoreEnum.Username]}}</a></td>
+                        <td><a @click="$electron.shell.openExternalPlayer(score[ScoreEnum.UserID])">{{score[ScoreEnum.Username]}}</a></td>
                         <td>{{score[ScoreEnum.Acc]}}%</td>
                         <td>{{score[ScoreEnum.Score]}}</td>
                         <td>{{ ConfigIndex.Characters[Number(score[ScoreEnum.Character])] }} / {{ ConfigIndex.Characters[Number(score[ScoreEnum.Companion])] }}</td>
@@ -78,6 +78,7 @@
     import { API, LeaderboardsAPI } from '@/modules/api'
     import { Chart } from '@/types/chart';
     import { Score, ScoreEnum, ConfigIndex } from '@/types/score';
+import { electron } from 'process';
 
     const api = new API()
     const leaderboardsApi = new LeaderboardsAPI()

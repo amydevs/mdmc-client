@@ -1,12 +1,18 @@
 const {
     contextBridge,
-    ipcRenderer
+    ipcRenderer,
+    shell
 } = require("electron");
 
 // Expose protected methods that allow the renderer process to use
 // the ipcRenderer without exposing the entire object
 
 contextBridge.exposeInMainWorld("electron", {
+    shell: {
+        openExternalPlayer: (id) => {
+            shell.openExternal(`https://musedash.moe/mdmc/player/${id}`);
+        }
+    },
     ipc: {
         invoke: (channel, data) => {
             return ipcRenderer.invoke(channel, data);
