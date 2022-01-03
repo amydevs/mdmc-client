@@ -105,6 +105,15 @@ import async, { doWhilst } from 'async'
 import getRawBody from 'raw-body'
 import { WriteStream } from 'original-fs'
 
+// Path
+function getAlbumsPath() {
+  const albumspath = path.join(store.get("gamePath") as string, "Custom_Albums");
+  if (!fs.existsSync(albumspath)) {
+    fs.mkdirSync(albumspath);
+  }
+  return albumspath;
+}
+
 // library scanning
 let library: Chart[] = [];
 store.events.on("change", (key: string) => {
@@ -120,7 +129,7 @@ function libraryScan() {
   }
 
   library = []
-  const gamePath = store.get("gamePath") as string;
+  const gamePath = getAlbumsPath();
   console.log(`scanning: ${gamePath}`)
   if (gamePath) {
     const files = fs.readdirSync(gamePath)
@@ -162,7 +171,7 @@ ipcMain.on('library-scan', (event) => {
   libraryScan()
 })
 ipcMain.on('library-delete', (event, fileName) => {
-  const filePath = path.join(store.get("gamePath") as string, fileName);
+  const filePath = path.join(getAlbumsPath(), fileName);
   fs.unlink(filePath, () => {
     libraryScan();
   });
@@ -213,7 +222,7 @@ let downloads: async.QueueObject<Chart> = async.queue((chart: Chart, cb) => {
     const buf = Buffer.from(await getRawBody(resp.data, {
       encoding: "ascii"
     }), "base64")
-    fs.writeFileSync(path.join(store.get("gamePath") as string, chart.name + ".mdm"), buf);
+    fs.writeFileSync(path.join(getAlbumsPath(), chart.name + ".mdm"), buf);
     cb()
   })
 }, 1);
