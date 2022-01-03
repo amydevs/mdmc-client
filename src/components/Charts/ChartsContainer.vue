@@ -10,22 +10,21 @@
             clearable
             hide-details
         ></v-text-field>
-        <div class="d-flex justify-space-between mx-1">
-          <v-switch
-            label="Show Easy"
-            v-model="show.easy"
-            hide-details
-          ></v-switch>
-          <v-switch
-            label="Show Hard"
-            v-model="show.hard"
-            hide-details
-          ></v-switch>
-          <v-switch
-            label="Show Master"
-            v-model="show.master"
-            hide-details
-          ></v-switch>
+        <div class="d-flex justify-space-between mt-3">
+          <v-btn
+            v-for="(option, i) in options"
+            :class="`
+              flex-grow-1 
+              ${i === 0 ? 'rounded-r-0' : (i === options.length - 1 ? 'rounded-l-0' : 'rounded-0')}
+            `"
+            depressed
+            :key="i"
+            :text="!option.value ? true : false"
+            @click="option.value = !option.value"
+            color="primary"
+          >
+            {{ option.text }}
+          </v-btn>
         </div>
       </v-card>
       <ChartComp v-for="(chart, i) in searchFilter" :chart="chart" :key="i" />
@@ -44,11 +43,11 @@
     data() {
       return {
         search: '',
-        show: {
-          easy: true,
-          hard: true,
-          master: true
-        }
+        options: [
+          { text: 'Show Easy', value: true, int: 1 },
+          { text: 'Show Hard', value: true, int: 2 },
+          { text: 'Show Master', value: true, int: 3 },
+        ],
       }
     },
     components: {
@@ -72,12 +71,17 @@
             )
           }
 
+          var tempBool = false
+          for (const option of this.$data.options) {
+            tempBool = tempBool || (option.value ?  ((chart as any)[`difficulty${option.int}`] != 0) : false) 
+          }
           // Filter by difficulty
-          return searchBool && (
-            (this.$data.show.easy ?  (chart.difficulty1 != 0) : false) ||
-            (this.$data.show.hard ?  (chart.difficulty2 != 0) : false) ||
-            (this.$data.show.master ?  (chart.difficulty3 != 0) : false)
-          )
+          return searchBool && tempBool
+          // && (
+          //   (this.$data.show.easy ?  (chart.difficulty1 != 0) : false) ||
+          //   (this.$data.show.hard ?  (chart.difficulty2 != 0) : false) ||
+          //   (this.$data.show.master ?  (chart.difficulty3 != 0) : false)
+          // )
         })
         return returnVal
       }
