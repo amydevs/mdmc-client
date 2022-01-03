@@ -85,7 +85,12 @@
 
     export default Vue.extend({
         name: 'Detail',
-        props: ['value', 'chart', 'inputDiff'],
+        // props: ['value', 'chart', 'inputDiff'],
+        props: {
+          value: Boolean,
+          chart: Object as () => Chart,
+          inputDiff: Number || null,
+        },
         components: {
             ChartComp: () => import('@/components/Charts/Chart.vue') as any
         },
@@ -113,8 +118,8 @@
         },
         computed: {
           filteredLeaderboard() {
-            var leaderboard = this.$data.leaderboard as Score[];
-            if (this.$data.search.length !== 0) {
+            var leaderboard = this.leaderboard as Score[];
+            if (this.search.length !== 0) {
               leaderboard = leaderboard.filter(score => score[ScoreEnum.Username].toLowerCase().includes(this.search.toLowerCase()))
             }
             return leaderboard
