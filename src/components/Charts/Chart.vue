@@ -73,7 +73,7 @@
             </v-card-actions>
         </div>
     </div>
-    <Detail v-if="displayDetails" v-model="displayDetails" :chart="addIdFromLocal(chart)" />
+    <Detail v-if="displayDetails" v-model="displayDetails" :chart="addIdFromLocal(chart)" :inputDiff="2" />
     </v-card>
 </template>
 
