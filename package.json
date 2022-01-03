@@ -1,5 +1,6 @@
 {
   "name": "mdmc-client",
+  "description": "A desktop client for downloading and managing Muse Dash charts/maps/songs/albums downloaded from https://mdmc.moe/.",
   "version": "0.1.0",
   "private": true,
   "scripts": {
