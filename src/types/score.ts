@@ -35,4 +35,12 @@ const Characters = {
 
 const Companions = {
     0: "Mio Sir",
+    1: "Angela",
+    2: "Thanatos",
+    3: "Rabot-233",
+    4: "Little Nurse",
+    5: "Little Witch",
+    6: "Dragon Girl",
+    7: "Lilith",
+    8: "Dr. Paige",
 }
