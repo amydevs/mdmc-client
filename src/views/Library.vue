@@ -18,15 +18,15 @@
     },
     data() {
       return {
-        charts: []
+        charts: [] as Chart[]
       }
     },
     async mounted() {
       window.electron.ipc.receive("library-update", (event:Chart[]) => {
-        this.$data.charts = event;
+        this.charts = event;
         console.log(event)
       });
-      this.$data.charts = window.electron.library.get();
+      this.charts = window.electron.library.get();
     }
   })
 </script>

@@ -125,11 +125,11 @@ export default Vue.extend({
     
 
     window.electron.ipc.receive('download-changed', (event:Chart[]) => {
-      this.$data.downloads = event;
+      this.downloads = event;
     });
     window.electron.ipc.receive('download-prog', (len: number, perc: number) => {
-      this.$data.len = len;
-      this.$data.perc = perc;
+      this.len = len;
+      this.perc = perc;
     });
   },
   data: () => ({
@@ -187,7 +187,7 @@ export default Vue.extend({
       //   "unlockLevel": "0",
       //   "id": "1"
       // }
-    ],
+    ] as Chart[],
     items: [
         {icon: 'mdi-home', title:'Home', route:'/'},
         {icon: 'mdi-tools', title:'Library', route:'/library'},
@@ -195,9 +195,6 @@ export default Vue.extend({
     ],
   }),
   watch: {
-    ind: function(val:number) {
-      this.$data.ind = 0;
-    }
   },
   computed: {
     currentRouteName() {

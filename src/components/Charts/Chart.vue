@@ -126,7 +126,7 @@
             window.electron.library.delete(this.chart.localPath)
         },
         togglePlay() {
-            if (this.$data.audio == undefined) {
+            if (!this.audio) {
                 this.$data.audio = new Audio(this.getDemoUrl())
             }
             const audio = this.$data.audio as HTMLAudioElement;
