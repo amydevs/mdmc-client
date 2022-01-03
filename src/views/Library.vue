@@ -18,15 +18,23 @@
     },
     data() {
       return {
-        charts: [] as Chart[]
+        charts: [] as Chart[],
+        delFunc: null as null | (() => void),
       }
     },
-    async mounted() {
-      window.electron.ipc.receive("library-update", (event:Chart[]) => {
-        this.charts = event;
+    mounted() {
+      this.delFunc = window.electron.ipc.receive("library-update", (event:Chart[]) => {
         console.log(event)
+        this.charts = event;
       });
       this.charts = window.electron.library.get();
+    },
+    beforeDestroy() {
+      if (this.delFunc) {
+        this.delFunc();
+      }
+    },
+    methods: {
     }
   })
 </script>
