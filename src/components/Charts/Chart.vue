@@ -96,7 +96,7 @@
     },
     data() {
       return {
-        inputDiff: 2,
+        inputDiff: this.value || 2,
         audio: null,
         audioPaused: true,
         displayDetails: false

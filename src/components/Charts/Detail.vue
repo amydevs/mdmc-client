@@ -104,6 +104,11 @@
         watch: {
             display: function (val:boolean) {
                 this.$emit('input', val)
+            },
+            difficulty: async function (val:number) {
+              if (this.finalizedChart.id !== undefined) {
+                this.leaderboard = (await leaderboardsApi.getScoresForChart(this.finalizedChart.id, this.difficulty - 1))
+              } 
             }
         },
         async mounted() {
