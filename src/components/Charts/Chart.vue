@@ -104,7 +104,7 @@
     data() {
       return {
         inputDiff: this.value || 2,
-        audio: null,
+        audio: null as null | HTMLAudioElement,
         audioPaused: true,
         displayDetails: false
       }
@@ -132,16 +132,16 @@
         },
         togglePlay() {
             if (!this.audio) {
-                this.$data.audio = new Audio(this.getDemoUrl())
+                this.audio = new Audio(this.getDemoUrl())
             }
-            const audio = this.$data.audio as HTMLAudioElement;
+            const audio = this.audio as HTMLAudioElement;
             
             if (audio.paused) {
                 audio.play();
-                this.$data.audioPaused = false;
+                this.audioPaused = false;
             } else {
                 audio.pause();
-                this.$data.audioPaused = true;
+                this.audioPaused = true;
             }
         },
         getImgUrl() {
