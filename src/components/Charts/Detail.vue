@@ -1,10 +1,11 @@
 <template>
-  <v-dialog v-model="display">
+  <v-dialog v-model="display" scrollable>
       <template>
         <v-card>
           <v-toolbar
             color="primary"
             dark
+            dense
           >{{ loaded ? finalizedChart.name : 'Loading' }}</v-toolbar>
 
           <v-card-text class="" v-if="loaded">
