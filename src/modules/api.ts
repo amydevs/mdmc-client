@@ -29,6 +29,6 @@ export class LeaderboardsAPI {
         this.basePath = "https://api.musedash.moe/";
     }
     async getScoresForChart(chardID: number, difficulty: number) {
-        return (await window.electron.axios.get(`${this.basePath}mdmc/chart/${chardID}/${difficulty}`)).data as Score[];
+        return (await window.electron.axios.get(`${this.basePath}mdmc/rank/${chardID}/${difficulty}`)).data as Score[];
     }
 }
