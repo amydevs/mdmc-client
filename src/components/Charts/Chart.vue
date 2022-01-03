@@ -1,7 +1,7 @@
 <template>
     <v-card
         width="500px"
-        class="ma-3 text-left"
+        class="ma-3 text-left flex-grow-1"
     >
     <div class="d-flex" style="height: 100%;">
         <v-avatar
