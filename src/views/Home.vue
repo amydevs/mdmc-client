@@ -5,6 +5,7 @@
     v-if="!loaded"
     :size="50"
     indeterminate
+    color="primary"
   ></v-progress-circular>
 </div>
 </template>
