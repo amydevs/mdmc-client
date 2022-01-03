@@ -29,7 +29,7 @@
                     small
                     v-if="chart.difficulty1 != 0"
                     v-text="chart.difficulty1"
-                    @click="displayDetails = true"
+                    @click="inputDiff = 1; displayDetails = true"
                 />
                 <v-btn
                     class="black--text"
@@ -39,7 +39,7 @@
                     small
                     v-if="chart.difficulty2 != 0"
                     v-text="chart.difficulty2"
-                    @click="displayDetails = true"
+                    @click="inputDiff = 2; displayDetails = true"
                 />
                 <v-btn
                     class="black--text"
@@ -49,6 +49,7 @@
                     small
                     v-if="chart.difficulty3 != 0"
                     v-text="chart.difficulty3"
+                    @click="inputDiff = 3; displayDetails = true"
                 />
             </v-card-actions>
             <v-card-title v-text="chart.name"></v-card-title>
@@ -73,7 +74,7 @@
             </v-card-actions>
         </div>
     </div>
-    <Detail v-if="displayDetails" v-model="displayDetails" :chart="addIdFromLocal(chart)" :inputDiff="2" />
+    <Detail v-if="displayDetails" v-model="displayDetails" :chart="addIdFromLocal(chart)" :inputDiff="inputDiff" />
     </v-card>
 </template>
 
@@ -95,6 +96,7 @@
     },
     data() {
       return {
+        inputDiff: 1,
         audio: null,
         audioPaused: true,
         displayDetails: false
