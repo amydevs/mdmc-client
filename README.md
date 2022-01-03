@@ -1,4 +1,4 @@
-# mdmc-client (Unofficial [Muse Dash Modding Community](https://mdmc.moe/) Chart Client)
+# mdmc-client (Unofficial [https://mdmc.moe/](https://mdmc.moe/) Chart Client)
 A desktop client for downloading and managing Muse Dash charts/maps/songs/albums downloaded from the [Muse Dash Modding Community Website](https://mdmc.moe/).
 
 ## Download
