@@ -207,7 +207,7 @@ const axiosDownloadInst = axios.create({
   timeout: 60000,
   responseType: "stream"
 });
-let downloads: async.QueueObject<Chart> = async.queue((chart: Chart, cb) => {
+let downloads = async.queue((chart: Chart, cb) => {
   win.webContents.send("download-changed", getAllDownloads())
   console.log("Starting Download > " + api.getChartDownloadUrl(chart.id as number));
   axiosDownloadInst.get(`${chart.id}`).catch(err => {
@@ -236,7 +236,7 @@ downloads.drain(() => {
 
 ipcMain.on("download-add", (event, chart: Chart) => {
   console.log("Added Download > " + chart.name);
-  downloads.push(chart);
+  downloads.push(chart)
   win.webContents.send("download-changed", getAllDownloads())
 });
 
@@ -245,5 +245,5 @@ ipcMain.on("download-getAll", (event) => {
 });
 
 function getAllDownloads() {
-  return downloads.workersList().map(w => w.data);
+  return downloads.workersList().map(w => w.data).concat([...(downloads as any)])
 }
