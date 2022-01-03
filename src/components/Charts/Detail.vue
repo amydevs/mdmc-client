@@ -126,7 +126,7 @@ import { electron } from 'process';
         methods: {
           async refreshLeaderboard() {
             if (this.finalizedChart.id !== undefined) {
-              this.leaderboard = (await leaderboardsApi.getScoresForChart(this.finalizedChart.id, this.difficulty - 1))
+              this.leaderboard = (await leaderboardsApi.getScoresForChart(this.finalizedChart.id, this.difficulty - 1)).sort((a, b) => a[ScoreEnum.Index] - b[ScoreEnum.Index])
             } 
           }
         }
