@@ -3,7 +3,7 @@ A desktop client for downloading and managing Muse Dash charts/maps/songs/albums
 
 ## Download
 - You can download the latest pre-release `.exe` from [https://github.com/jy1263/mdmc-client/releases/latest/](https://github.com/jy1263/mdmc-client/releases/latest/)
-- Or the latest build from [https://github.com/jy1263/mdmc-client/actions](https://github.com/jy1263/mdmc-client/actions)
+- Or the latest build from [https://github.com/jy1263/mdmc-client/actions/workflows/node.js.yml](https://github.com/jy1263/mdmc-client/actions/workflows/node.js.yml) (GitHub Account Needed)
 
 ## Features (So Far)
 - Queue Charts to be Downloaded in the Background.
