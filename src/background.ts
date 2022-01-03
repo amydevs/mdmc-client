@@ -121,10 +121,10 @@ store.events.on("change", (key: string) => {
     libraryScan()
   }
 })
-function libraryScan() {
+async function libraryScan() {
   const cb = () => {
     win.webContents.send("library-update", library);
-    console.log(`scan complete: ${albumsPath}`)
+    console.log(`scan complete: ${albumsPath}, got ${library.length} charts`);
     return;
   }
 
@@ -133,7 +133,8 @@ function libraryScan() {
   console.log(`scanning: ${albumsPath}`)
   if (albumsPath) {
     const files = fs.readdirSync(albumsPath)
-    files.forEach(async (file, i) => {
+
+    for (const [i, file] of files.entries()) {
       if (file.endsWith(".mdm")) {
         const zip = new JSZip();
         try {
@@ -158,7 +159,7 @@ function libraryScan() {
         }
       }
       if (i === files.length -1) cb();
-    });
+    }
     if (0 === files.length) cb()
   }
 }
