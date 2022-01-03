@@ -28,3 +28,4 @@ jobs:
         cache: 'yarn'
     - run: yarn --immutable
     - run: yarn electron:build
+    - run: du dist/
