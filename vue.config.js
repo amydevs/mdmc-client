@@ -6,7 +6,7 @@ module.exports = {
     electronBuilder: {
       nodeIntegration: false,
       preload: 'src/preload.js',
-      publish: []
+      publish: "never"
     }
   }
 }
