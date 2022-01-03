@@ -12,7 +12,7 @@ on:
 jobs:
   build:
 
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
 
     strategy:
       matrix:
@@ -28,7 +28,7 @@ jobs:
         cache: 'yarn'
     - run: yarn --immutable --prefer-offline
     - run: yarn electron:build
-    - run: du ./ -a
+    - run: tree /F
     - uses: actions/upload-artifact@v2
       with:
         name: linux-snap
