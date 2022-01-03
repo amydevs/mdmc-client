@@ -21,7 +21,7 @@
             :key="i"
             :text="!option.value ? true : false"
             @click="option.value = !option.value"
-            color="primary"
+            :color="`primary ${!option.value ? 'lighten-1' : ''}`"
           >
             {{ option.text }}
           </v-btn>
