@@ -83,12 +83,12 @@
         this.$nextTick(() => {
           setTimeout(() => {
             i.focus()
-          }, 0)
+            const folders = window.electron.dialog.openDialog()
+            if (folders) {
+              e.value = folders[0]
+            }
+          })
         })
-        const folders = window.electron.dialog.openDialog()
-        if (folders) {
-          e.value = folders[0]
-        }
       },
     },
     async mounted() {
