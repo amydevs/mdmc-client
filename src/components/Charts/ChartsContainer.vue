@@ -8,8 +8,9 @@
             label="Search"
             outlined
             clearable
-            hide-details
-        ></v-text-field>
+            hide-details="auto"
+            :rules="[() => (length != 0 || 'No Charts Found...')]"
+        ></v-text-field>...
         <div class="d-flex justify-space-between mt-3">
           <v-btn
             v-for="(option, i) in options"
@@ -43,6 +44,7 @@
     data() {
       return {
         search: '',
+        length: 1,
         options: [
           { text: 'Show Easy', value: true, int: 1 },
           { text: 'Show Hard', value: true, int: 2 },
@@ -83,6 +85,7 @@
           //   (this.$data.show.master ?  (chart.difficulty3 != 0) : false)
           // )
         })
+        this.$data.length = returnVal.length
         return returnVal
       }
     }
