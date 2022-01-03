@@ -27,6 +27,7 @@
     </v-navigation-drawer>
     
     <v-app-bar
+      ref="appbar"
       app
       dense
       fixed
@@ -41,7 +42,7 @@
       </v-btn>
     </v-app-bar>
 
-    <v-main class="">
+    <v-main :style="`height: calc(100vh - ${appbarHeight}px);`" class="">
       <keep-alive include="Home">
         <router-view :key="$route.fullPath" />
       </keep-alive>
@@ -103,6 +104,7 @@
 </template>
 
 <script lang="ts">
+import ResizeObserver from 'resize-observer-polyfill';
 import Vue from 'vue';
 import PathDialogue from '@/components/Misc/PathDialogue.vue'
 import { Chart } from './types/chart';
@@ -113,6 +115,15 @@ export default Vue.extend({
     PathDialogue
   },
   mounted() {
+    // appbar observer
+    const appbaro = new ResizeObserver((e) => {
+      this.appbarHeight = e[0].contentRect.width;
+    });
+    if (this.$refs.appbar) {
+      appbaro.observe((this.$refs.appbar as any).$el);
+    }
+    
+
     window.electron.ipc.receive('download-changed', (event:Chart[]) => {
       this.$data.downloads = event;
     });
@@ -122,6 +133,7 @@ export default Vue.extend({
     });
   },
   data: () => ({
+    appbarHeight: 48,
     drawer: false,
     downloadDrawer: false,
     len: 0,
@@ -196,9 +208,16 @@ export default Vue.extend({
 });
 </script>
 <style lang="scss">
+html{
+  overflow-y: hidden !important;
+  .v-main__wrap {
+    overflow-y: auto !important;
+  }
+}
 :root {
   ::-webkit-scrollbar {
     width: 10px;
+    height: 10px;
   }
   ::-webkit-scrollbar-corner {
       background: rgba(0,0,0,0);
