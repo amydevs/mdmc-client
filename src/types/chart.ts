@@ -19,3 +19,11 @@ export interface Chart {
     localPath?: string;
     b64Cover?: string;
 }
+
+export abstract class DiffIndex {
+    public static Difficulties = {
+        1: "Easy",
+        2: "Hard",
+        3: "Master",
+    }
+}

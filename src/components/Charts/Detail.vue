@@ -16,7 +16,7 @@
 
               <v-card v-if="leaderboard.length !== 0" class="mx-3">
                 <v-toolbar dense flat>
-                  <v-toolbar-title>{{ difficulty }}</v-toolbar-title>
+                  <v-toolbar-title>{{ DiffIndex.Difficulties[difficulty] }}</v-toolbar-title>
                   <v-spacer></v-spacer>
                   <v-btn icon @click="refreshLeaderboard()">
                     <v-icon>mdi-refresh-circle</v-icon>
@@ -76,9 +76,9 @@
 <script lang="ts">
     import { Component, Prop, Vue } from 'vue-property-decorator'
     import { API, LeaderboardsAPI } from '@/modules/api'
-    import { Chart } from '@/types/chart';
+    import { Chart, DiffIndex } from '@/types/chart';
     import { Score, ScoreEnum, ConfigIndex } from '@/types/score';
-import { electron } from 'process';
+    import { electron } from 'process';
 
     const api = new API()
     const leaderboardsApi = new LeaderboardsAPI()
@@ -91,8 +91,10 @@ import { electron } from 'process';
         },
         data() {
           return {
+            DiffIndex: DiffIndex,
             ConfigIndex: ConfigIndex,
             ScoreEnum: ScoreEnum,
+
             difficulty: this.inputDiff || 2,
             display: this.value as boolean,
             finalizedChart: {} as Chart,
