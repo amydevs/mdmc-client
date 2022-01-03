@@ -31,3 +31,6 @@ yarn electron:build
 
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
+
+## DISCLAIMER
+This project is in no way affiliated with the Muse Dash Modding Community, or the rights holders of Muse Dash.
