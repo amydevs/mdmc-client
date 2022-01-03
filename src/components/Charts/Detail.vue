@@ -88,7 +88,7 @@
         // props: ['value', 'chart', 'inputDiff'],
         props: {
           value: Boolean,
-          chart: Object as () => Chart,
+          chart: (Promise as unknown) as () => Promise<Chart>,
           inputDiff: Number || null,
         },
         components: {
@@ -126,7 +126,7 @@
           }
         },
         async mounted() {
-          this.finalizedChart = (await this.chart) as Chart
+          this.finalizedChart = (await this.chart)
           this.loaded = true
           await this.refreshLeaderboard();
         },
