@@ -95,7 +95,7 @@ const store = new Store();
 import axios from "axios"
 
 import fs from 'fs';
-import { Chart } from '@/types/chart'
+import { Chart, QChart } from '@/types/chart'
 import JSZip, { remove } from "jszip";
 
 import { API } from './modules/api'
@@ -207,7 +207,7 @@ const axiosDownloadInst = axios.create({
   timeout: 60000,
   responseType: "stream"
 });
-let downloads = async.queue((chart: Chart, cb) => {
+let downloads = async.queue((chart: QChart, cb) => {
   win.webContents.send("download-changed", getAllDownloads())
   console.log("Starting Download > " + api.getChartDownloadUrl(chart.id as number));
   axiosDownloadInst.get(`${chart.id}`).catch(err => {
@@ -236,7 +236,9 @@ downloads.drain(() => {
 
 ipcMain.on("download-add", (event, chart: Chart) => {
   console.log("Added Download > " + chart.name);
-  downloads.push(chart)
+  var qchart = chart as QChart
+  qchart.QIndex = Math.floor(Math.random() * 1000000).toString()
+  downloads.push(qchart)
   win.webContents.send("download-changed", getAllDownloads())
 });
 

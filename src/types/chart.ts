@@ -20,6 +20,10 @@ export interface Chart {
     b64Cover?: string;
 }
 
+export interface QChart extends Chart {
+    QIndex: string;
+}
+
 export abstract class DiffIndex {
     public static Difficulties = {
         1: "Easy",
