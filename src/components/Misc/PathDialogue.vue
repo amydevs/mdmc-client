@@ -64,13 +64,13 @@
       async openTDialog() {
         const folders = window.electron.dialog.openDialog()
         if (folders) {
-          this.$data.gamePath = folders[0]
+          this.gamePath = folders[0]
         }
       },
       exit() {
-        if (window.electron.fs.existsSync(this.$data.gamePath)) {
-          window.electron.store.set("gamePath", this.$data.gamePath)
-          this.$data.dialog = false
+        if (window.electron.fs.existsSync(this.gamePath)) {
+          window.electron.store.set("gamePath", this.gamePath)
+          this.dialog = false
         }
         else {
           console.log("Invalid Path")
