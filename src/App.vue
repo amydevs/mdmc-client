@@ -224,7 +224,6 @@ html{
   }
   ::-webkit-scrollbar-thumb {
       background-color: white;
-      border-radius: 10px;
       min-width: 32px;
       min-height: 32px;
   }
