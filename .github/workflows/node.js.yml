@@ -28,6 +28,9 @@ jobs:
         cache: 'yarn'
     - run: yarn --immutable --prefer-offline
     - run: yarn electron:build
+      env:
+        GH_TOKEN: ${{ secrets.GH_TOKEN }}
+
     - name: 'Upload Artifact'
       uses: actions/upload-artifact@v2
       with:
