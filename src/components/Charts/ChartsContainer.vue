@@ -10,7 +10,7 @@
             clearable
             hide-details="auto"
             :rules="[() => (length != 0 || 'No Charts Found...')]"
-        ></v-text-field>...
+        ></v-text-field>
         <div class="d-flex justify-space-between mt-3">
           <v-btn
             v-for="(option, i) in options"
