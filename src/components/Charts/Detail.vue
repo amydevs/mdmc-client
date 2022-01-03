@@ -14,7 +14,7 @@
               </div>
 
 
-              <v-card v-if="leaderboard.length !== 0">
+              <v-card v-if="leaderboard.length !== 0" class="mx-3">
                 <v-toolbar dense flat>
                   <v-toolbar-title>{{ finalizedChart.name }}</v-toolbar-title>
                   <v-spacer></v-spacer>
