@@ -17,8 +17,9 @@
                     :rules="setting.rules"
                     v-model="setting.value"
                     hide-details="auto"
+                    :ref="`${i}-picker`"
                     @change="setting.cb"
-                    @click:append="openTDialog(setting)"
+                    @click:append="openTDialog(setting, $refs[`${i}-picker`][0])"
                 ></v-text-field>
 
               </v-list-item-content>
@@ -78,7 +79,12 @@
       }
     },
     methods: {
-      async openTDialog(e:any) {
+      async openTDialog(e:any, i: any) {
+        this.$nextTick(() => {
+          setTimeout(() => {
+            i.focus()
+          }, 0)
+        })
         const folders = window.electron.dialog.openDialog()
         if (folders) {
           e.value = folders[0]
