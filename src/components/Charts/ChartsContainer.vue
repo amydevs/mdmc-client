@@ -8,7 +8,6 @@
             label="Search"
             outlined
             clearable
-            filled
             hide-details="auto"            
             :rules="[() => (length != 0 || 'No Charts Found...')]"
         ></v-text-field>
