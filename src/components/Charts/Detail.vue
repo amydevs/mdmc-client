@@ -16,24 +16,21 @@
 
               <v-card v-if="leaderboard.length !== 0" class="mx-3">
                 <v-toolbar dense flat>
-                  <v-toolbar-title>{{ finalizedChart.name }}</v-toolbar-title>
+                  <v-toolbar-title>{{ difficulty }}</v-toolbar-title>
                   <v-spacer></v-spacer>
-                  <v-btn icon>
-                    <v-icon>mdi-arrow-left</v-icon>
-                  </v-btn>
-                  <v-btn icon>
-                    <v-icon>mdi-arrow-right</v-icon>
+                  <v-btn icon @click="refreshLeaderboard()">
+                    <v-icon>mdi-refresh-circle</v-icon>
                   </v-btn>
                   <v-text-field
                     dense
-                    solo
+                    outlined
                     hide-details
-                    label="Page"
-                    placeholder="1"
+                    label="Search Username"
                     rounded
                     filled
-                    style="max-width: 150px;"
+                    style="max-width: 190px;"
                     class="pagenum"
+                    v-model="search"
                   />
 
                 </v-toolbar>
@@ -50,7 +47,7 @@
                       </tr>
                     </thead>
                     <tbody>
-                       <tr v-for="(score, i) in leaderboard" :key="i">
+                       <tr v-for="(score, i) in filteredLeaderboard" :key="i">
                         <td>{{score[ScoreEnum.Index]+1}}</td>
                         <td><a :href="`https://musedash.moe/mdmc/player/${score[ScoreEnum.Username]}`">{{score[ScoreEnum.Username]}}</a></td>
                         <td>{{score[ScoreEnum.Acc]}}%</td>
@@ -100,6 +97,7 @@
             finalizedChart: {} as Chart,
             loaded: false,
             leaderboard: [] as Score[],
+            search: '',
           }
         },
         watch: {
@@ -107,17 +105,29 @@
                 this.$emit('input', val)
             },
             difficulty: async function (val:number) {
-              if (this.finalizedChart.id !== undefined) {
-                this.leaderboard = (await leaderboardsApi.getScoresForChart(this.finalizedChart.id, this.difficulty - 1))
-              } 
+              await this.refreshLeaderboard();
             }
+        },
+        computed: {
+          filteredLeaderboard() {
+            var leaderboard = this.$data.leaderboard as Score[];
+            if (this.$data.search.length !== 0) {
+              leaderboard = leaderboard.filter(score => score[ScoreEnum.Username].toLowerCase().includes(this.search.toLowerCase()))
+            }
+            return leaderboard
+          }
         },
         async mounted() {
           this.finalizedChart = (await this.chart) as Chart
           this.loaded = true
-          if (this.finalizedChart.id !== undefined) {
-            this.leaderboard = (await leaderboardsApi.getScoresForChart(this.finalizedChart.id, this.difficulty - 1))
-          } 
+          await this.refreshLeaderboard();
         },
+        methods: {
+          async refreshLeaderboard() {
+            if (this.finalizedChart.id !== undefined) {
+              this.leaderboard = (await leaderboardsApi.getScoresForChart(this.finalizedChart.id, this.difficulty - 1))
+            } 
+          }
+        }
     })
 </script>
