@@ -29,7 +29,7 @@
                     small
                     v-if="chart.difficulty1 != 0"
                     v-text="chart.difficulty1"
-                    @click="inputDiff = 1; displayDetails = true"
+                    @click="openDetails(1)"
                 />
                 <v-btn
                     class="black--text"
@@ -39,7 +39,7 @@
                     small
                     v-if="chart.difficulty2 != 0"
                     v-text="chart.difficulty2"
-                    @click="inputDiff = 2; displayDetails = true"
+                    @click="openDetails(2)"
                 />
                 <v-btn
                     class="black--text"
@@ -49,7 +49,7 @@
                     small
                     v-if="chart.difficulty3 != 0"
                     v-text="chart.difficulty3"
-                    @click="inputDiff = 3; displayDetails = true"
+                    @click="openDetails(3)"
                 />
             </v-card-actions>
             <v-card-title v-text="chart.name"></v-card-title>
@@ -90,13 +90,13 @@
 
   export default Vue.extend({
     name: 'Chart',
-    props: ['chart'],
+    props: ['chart', 'value'],
     components: {
       Detail
     },
     data() {
       return {
-        inputDiff: 1,
+        inputDiff: 2,
         audio: null,
         audioPaused: true,
         displayDetails: false
@@ -140,6 +140,15 @@
         },
         getDemoUrl() {
             return api.getDemoForChart(this.chart.id);
+        },
+        openDetails(diff: number) {
+            this.inputDiff = diff;
+            if (isNaN(this.value)) {
+                this.displayDetails = true
+            }
+            else {
+                this.$emit('input', this.inputDiff)
+            }
         }
     },
     computed: {

@@ -9,7 +9,7 @@
 
           <v-card-text class="" v-if="loaded">
               <div class="d-flex">
-                <ChartComp :chart="finalizedChart" />
+                <ChartComp :chart="finalizedChart" v-model="difficulty" />
               </div>
 
 
