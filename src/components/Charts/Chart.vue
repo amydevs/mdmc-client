@@ -94,7 +94,10 @@
 
   export default Vue.extend({
     name: 'Chart',
-    props: ['chart', 'value'],
+    props: {
+        chart: Object as () => Chart,
+        value: Number
+    },
     components: {
       Detail
     },
@@ -123,7 +126,9 @@
             window.electron.ipc.send('download-add', chart)
         },
         deleteC() {
-            window.electron.library.delete(this.chart.localPath)
+            if (this.chart.localPath) {
+                window.electron.library.delete(this.chart.localPath)
+            }
         },
         togglePlay() {
             if (!this.audio) {
@@ -140,10 +145,12 @@
             }
         },
         getImgUrl() {
-            return api.getCoverForChart(this.chart.id);
+            if (this.chart.id) return api.getCoverForChart(this.chart.id);
+            else return "";
         },
         getDemoUrl() {
-            return api.getDemoForChart(this.chart.id);
+            if (this.chart.id) return api.getDemoForChart(this.chart.id);
+            else return "";
         },
         openDetails(diff: number) {
             this.inputDiff = diff;
