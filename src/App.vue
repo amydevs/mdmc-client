@@ -107,7 +107,7 @@
 import ResizeObserver from 'resize-observer-polyfill';
 import Vue from 'vue';
 import PathDialogue from '@/components/Misc/PathDialogue.vue'
-import { Chart } from './types/chart';
+import { Chart, QChart } from './types/chart';
 
 export default Vue.extend({
   name: 'App',
@@ -124,7 +124,7 @@ export default Vue.extend({
     }
     
 
-    window.electron.ipc.receive('download-changed', (event:Chart[]) => {
+    window.electron.ipc.receive('download-changed', (event:QChart[]) => {
       this.downloads = event;
     });
     window.electron.ipc.receive('download-prog', (len: number, perc: number) => {
@@ -187,7 +187,7 @@ export default Vue.extend({
       //   "unlockLevel": "0",
       //   "id": "1"
       // }
-    ] as Chart[],
+    ] as QChart[],
     items: [
         {icon: 'mdi-home', title:'Home', route:'/'},
         {icon: 'mdi-tools', title:'Library', route:'/library'},
