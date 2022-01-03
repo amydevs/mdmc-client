@@ -124,20 +124,20 @@ store.events.on("change", (key: string) => {
 function libraryScan() {
   const cb = () => {
     win.webContents.send("library-update", library);
-    console.log(`scan complete: ${gamePath}`)
+    console.log(`scan complete: ${albumsPath}`)
     return;
   }
 
   library = []
-  const gamePath = getAlbumsPath();
-  console.log(`scanning: ${gamePath}`)
-  if (gamePath) {
-    const files = fs.readdirSync(gamePath)
+  const albumsPath = getAlbumsPath();
+  console.log(`scanning: ${albumsPath}`)
+  if (albumsPath) {
+    const files = fs.readdirSync(albumsPath)
     files.forEach(async (file, i) => {
       if (file.endsWith(".mdm")) {
         const zip = new JSZip();
         try {
-          const localPath = path.join(gamePath, file);
+          const localPath = path.join(albumsPath, file);
           const zipfile = await zip.loadAsync(fs.readFileSync(localPath));
           let tempChartFile = {
             isLocal: true,
