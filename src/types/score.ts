@@ -18,29 +18,30 @@ export interface Score {
     6: string;
 }
 
-const Characters = {
-    0: "Bassist",
-    3: "Bunny Girl",
-    5: "Idol",
-    7: "Joker",
-    9: "Maid",
-    11: "Little Devil",
-    12: "The Girl In Black",
-    13: "Christmas Gift",
-    15: "Navigator",
-    16: "Game Streamer",
-    17: "Part-Time Warrior",
-    18: "Red-White Miko"
-}
-
-const Companions = {
-    0: "Mio Sir",
-    1: "Angela",
-    2: "Thanatos",
-    3: "Rabot-233",
-    4: "Little Nurse",
-    5: "Little Witch",
-    6: "Dragon Girl",
-    7: "Lilith",
-    8: "Dr. Paige",
+export abstract class ConfigIndex {
+    public static Characters = {
+        0: "Bassist",
+        3: "Bunny Girl",
+        5: "Idol",
+        7: "Joker",
+        9: "Maid",
+        11: "Little Devil",
+        12: "The Girl In Black",
+        13: "Christmas Gift",
+        15: "Navigator",
+        16: "Game Streamer",
+        17: "Part-Time Warrior",
+        18: "Red-White Miko"
+    }
+    public static Companions = {
+        0: "Mio Sir",
+        1: "Angela",
+        2: "Thanatos",
+        3: "Rabot-233",
+        4: "Little Nurse",
+        5: "Little Witch",
+        6: "Dragon Girl",
+        7: "Lilith",
+        8: "Dr. Paige",
+    }    
 }
