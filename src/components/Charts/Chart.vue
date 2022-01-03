@@ -1,7 +1,10 @@
 <template>
+<v-lazy
+    width="500px"
+    class="ma-3 text-left flex-grow-1"
+>
     <v-card
-        width="500px"
-        class="ma-3 text-left flex-grow-1"
+        style="height: 100%"
     >
     <div class="d-flex" style="height: 100%;">
         <v-avatar
@@ -76,6 +79,7 @@
     </div>
     <Detail v-if="displayDetails" v-model="displayDetails" :chart="addIdFromLocal(chart)" :inputDiff="inputDiff" />
     </v-card>
+</v-lazy>
 </template>
 
 <script lang="ts">
