@@ -216,9 +216,14 @@ let downloads = async.queue((chart: QChart, cb) => {
   .then(async (resp: any) => {
     try {
       var len = 0;
+      var count = 0;
       resp.data.on("data", function (chunk:Uint8Array) {
         len += chunk.length;
-        win.webContents.send("download-prog",  (len/(1024*1024)).toPrecision(3), 100*(len/20971520))
+        count++;
+        if(count >= 40) {
+          win.webContents.send("download-prog",  (len/(1024*1024)).toPrecision(3), 100*(len/20971520))
+          count = 0
+        }
       });
       const buf = Buffer.from(await getRawBody(resp.data, {
         encoding: "ascii"
