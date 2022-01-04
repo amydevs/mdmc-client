@@ -25,7 +25,8 @@ declare global {
       ipc: {
         invoke: (channel: string, data?: any) => Promise<any>;
         send: (channel: string, data?: any) => void;
-        receive: (channel: string, ...args: any[]) => void;
+        receive: (channel: string, ...args: any[]) => (() => void);
+        removeAll: (channel: string) => void;
       },
       downloads: {
         getAll: () => Chart[]

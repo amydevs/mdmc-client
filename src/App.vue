@@ -70,6 +70,12 @@
                 <v-list-item-subtitle v-if="index != 0">{{ item.author }}</v-list-item-subtitle>
                 <v-list-item-subtitle v-else>Downloaded {{ len }}MB</v-list-item-subtitle>
               </v-list-item-content>
+              <v-list-item-action v-if="index !== 0">
+                <v-btn icon @click="$electron.ipc.send('download-remove', item.QIndex)">
+                  <v-icon>mdi-close</v-icon>
+                </v-btn>
+              </v-list-item-action>
+
           </v-list-item>
           <v-progress-linear
             :value="perc"
@@ -107,7 +113,7 @@
 import ResizeObserver from 'resize-observer-polyfill';
 import Vue from 'vue';
 import PathDialogue from '@/components/Misc/PathDialogue.vue'
-import { Chart } from './types/chart';
+import { Chart, QChart } from './types/chart';
 
 export default Vue.extend({
   name: 'App',
@@ -122,14 +128,13 @@ export default Vue.extend({
     if (this.$refs.appbar) {
       appbaro.observe((this.$refs.appbar as any).$el);
     }
-    
 
-    window.electron.ipc.receive('download-changed', (event:Chart[]) => {
-      this.$data.downloads = event;
+    window.electron.ipc.receive('download-changed', (event:QChart[]) => {
+      this.downloads = event;
     });
     window.electron.ipc.receive('download-prog', (len: number, perc: number) => {
-      this.$data.len = len;
-      this.$data.perc = perc;
+      this.len = len;
+      this.perc = perc;
     });
   },
   data: () => ({
@@ -187,7 +192,7 @@ export default Vue.extend({
       //   "unlockLevel": "0",
       //   "id": "1"
       // }
-    ],
+    ] as QChart[],
     items: [
         {icon: 'mdi-home', title:'Home', route:'/'},
         {icon: 'mdi-tools', title:'Library', route:'/library'},
@@ -195,9 +200,6 @@ export default Vue.extend({
     ],
   }),
   watch: {
-    ind: function(val:number) {
-      this.$data.ind = 0;
-    }
   },
   computed: {
     currentRouteName() {

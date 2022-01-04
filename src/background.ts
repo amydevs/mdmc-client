@@ -95,7 +95,8 @@ const store = new Store();
 import axios from "axios"
 
 import fs from 'fs';
-import { Chart } from '@/types/chart'
+import { Chart, QChart } from '@/types/chart'
+import { Headers } from '@/types/headers'
 import JSZip, { remove } from "jszip";
 
 import { API } from './modules/api'
@@ -103,7 +104,7 @@ const api = new API();
 
 import async, { doWhilst } from 'async'
 import getRawBody from 'raw-body'
-import { WriteStream } from 'original-fs'
+import zlib from 'zlib'
 
 // Path
 function getAlbumsPath() {
@@ -121,10 +122,10 @@ store.events.on("change", (key: string) => {
     libraryScan()
   }
 })
-function libraryScan() {
+async function libraryScan() {
   const cb = () => {
     win.webContents.send("library-update", library);
-    console.log(`scan complete: ${albumsPath}`)
+    console.log(`scan complete: ${albumsPath}, got ${library.length} charts`);
     return;
   }
 
@@ -133,7 +134,8 @@ function libraryScan() {
   console.log(`scanning: ${albumsPath}`)
   if (albumsPath) {
     const files = fs.readdirSync(albumsPath)
-    files.forEach(async (file, i) => {
+
+    for (const [i, file] of files.entries()) {
       if (file.endsWith(".mdm")) {
         const zip = new JSZip();
         try {
@@ -158,7 +160,7 @@ function libraryScan() {
         }
       }
       if (i === files.length -1) cb();
-    });
+    }
     if (0 === files.length) cb()
   }
 }
@@ -202,28 +204,40 @@ ipcMain.on('dialog-open', (event) => {
 
 // download
 const axiosDownloadInst = axios.create({
+  decompress: false,
   baseURL: `${api.getChartDownloadBaseUrl()}`,
   timeout: 60000,
+  headers: Headers.DownloadHeaders,
   responseType: "stream"
 });
-let downloads: async.QueueObject<Chart> = async.queue((chart: Chart, cb) => {
+let downloads = async.queue((chart: QChart, cb) => {
   win.webContents.send("download-changed", getAllDownloads())
   console.log("Starting Download > " + api.getChartDownloadUrl(chart.id as number));
   axiosDownloadInst.get(`${chart.id}`).catch(err => {
-    console.error(err);
-    cb()
+    cb(Error(err.message))
   })
   .then(async (resp: any) => {
-    var len = 0;
-    resp.data.on("data", function (chunk:Uint8Array) {
-      len += chunk.length;
-      win.webContents.send("download-prog",  (len/(1024*1024)).toPrecision(3), 100*(len/20971520))
-    });
-    const buf = Buffer.from(await getRawBody(resp.data, {
-      encoding: "ascii"
-    }), "base64")
-    fs.writeFileSync(path.join(getAlbumsPath(), chart.name + ".mdm"), buf);
-    cb()
+    try {
+      const decomp = resp.data.pipe(zlib.createBrotliDecompress()) as zlib.BrotliDecompress
+      var len = 0;
+      var count = 0;
+      resp.data.on("data", function (chunk:Uint8Array) {
+        len += chunk.length;
+        count++;
+        if(count >= 40) {
+          win.webContents.send("download-prog",  (len/(1024*1024)).toPrecision(3), 100*(len/20971520))
+          count = 0
+        }
+      });
+      const buf = Buffer.from(await getRawBody(decomp, {
+        encoding: "ascii"
+      }), "base64")
+      fs.writeFileSync(path.join(getAlbumsPath(), chart.name + ".mdm"), buf);
+      cb()
+    }
+    catch {
+      cb(Error('Could not download chart'))
+    }
   })
 }, 1);
 
@@ -233,10 +247,24 @@ downloads.drain(() => {
   libraryScan();
 });
 
+downloads.error((err, task) => {
+  console.error(`${task.name} failed to download!`)
+})
+
 ipcMain.on("download-add", (event, chart: Chart) => {
-  win.webContents.send("download-changed", getAllDownloads())
   console.log("Added Download > " + chart.name);
-  downloads.push(chart);
+  var qchart = chart as QChart
+  qchart.QIndex = Math.floor(Math.random() * 1000000).toString()
+  downloads.push(qchart)
+  win.webContents.send("download-changed", getAllDownloads())
+});
+
+ipcMain.on("download-remove", (event, QueueID: string) => {
+  console.log("Removed Download > " + QueueID);
+  downloads.remove((e) => { 
+    return e.data.QIndex == QueueID 
+  })
+  win.webContents.send("download-changed", getAllDownloads())
 });
 
 ipcMain.on("download-getAll", (event) => {
@@ -244,5 +272,5 @@ ipcMain.on("download-getAll", (event) => {
 });
 
 function getAllDownloads() {
-  return downloads.workersList().map(w => w.data);
+  return downloads.workersList().map(w => w.data).concat([...(downloads as any)])
 }

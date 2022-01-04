@@ -1,6 +1,8 @@
 # mdmc-client (Unofficial [https://mdmc.moe/](https://mdmc.moe/) Chart Client)
 A desktop client for downloading and managing Muse Dash charts/maps/songs/albums downloaded from the [Muse Dash Modding Community Website](https://mdmc.moe/).
 
+![screenshot](./docs/screenshot.png)
+
 ## Download
 - You can download the latest pre-release `.exe` from [https://github.com/jy1263/mdmc-client/releases/latest/](https://github.com/jy1263/mdmc-client/releases/latest/)
 - Or the latest build from [https://github.com/jy1263/mdmc-client/actions/workflows/node.js.yml](https://github.com/jy1263/mdmc-client/actions/workflows/node.js.yml) (GitHub Account Needed)

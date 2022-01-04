@@ -94,14 +94,17 @@
 
   export default Vue.extend({
     name: 'Chart',
-    props: ['chart', 'value'],
+    props: {
+        chart: Object as () => Chart,
+        value: Number
+    },
     components: {
       Detail
     },
     data() {
       return {
         inputDiff: this.value || 2,
-        audio: null,
+        audio: null as null | HTMLAudioElement,
         audioPaused: true,
         displayDetails: false
       }
@@ -123,27 +126,31 @@
             window.electron.ipc.send('download-add', chart)
         },
         deleteC() {
-            window.electron.library.delete(this.chart.localPath)
+            if (this.chart.localPath) {
+                window.electron.library.delete(this.chart.localPath)
+            }
         },
         togglePlay() {
-            if (this.$data.audio == undefined) {
-                this.$data.audio = new Audio(this.getDemoUrl())
+            if (!this.audio) {
+                this.audio = new Audio(this.getDemoUrl())
             }
-            const audio = this.$data.audio as HTMLAudioElement;
+            const audio = this.audio as HTMLAudioElement;
             
             if (audio.paused) {
                 audio.play();
-                this.$data.audioPaused = false;
+                this.audioPaused = false;
             } else {
                 audio.pause();
-                this.$data.audioPaused = true;
+                this.audioPaused = true;
             }
         },
         getImgUrl() {
-            return api.getCoverForChart(this.chart.id);
+            if (this.chart.id) return api.getCoverForChart(this.chart.id);
+            else return "";
         },
         getDemoUrl() {
-            return api.getDemoForChart(this.chart.id);
+            if (this.chart.id) return api.getDemoForChart(this.chart.id);
+            else return "";
         },
         openDetails(diff: number) {
             this.inputDiff = diff;

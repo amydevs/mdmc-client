@@ -14,6 +14,7 @@
   import Vue from 'vue'
   import ChartsContainer from '../components/Charts/ChartsContainer.vue'
   import { API } from '@/modules/api'
+import { Chart } from '@/types/chart'
 
   const api = new API()
 
@@ -26,12 +27,12 @@
     data() {
       return {
         loaded: false,
-        charts: []
+        charts: [] as Chart[]
       }
     },
     async mounted() {
-      this.$data.charts = await api.getCharts();
-      this.$data.loaded = true;
+      this.charts = await api.getCharts();
+      this.loaded = true;
     }
   })
 </script>

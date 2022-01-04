@@ -55,14 +55,18 @@
     components: {
       ChartComp
     },
-    props: ['charts'],
+    props: {
+      charts: {
+        type: Array as () => Chart[]
+      }
+    },
     computed: {
       searchFilter() {
-        const len = (this.$data as any).search.length as number
+        const len = this.search.length as number
         
         var returnVal = this.charts as Chart[]
         
-        const lowercaseSearch = this.$data.search.toLowerCase()
+        const lowercaseSearch = this.search.toLowerCase()
         returnVal = returnVal.filter(chart => {
           var searchBool = true
           if (len !== 0) {
@@ -74,7 +78,7 @@
           }
 
           var tempBool = false
-          for (const option of this.$data.options) {
+          for (const option of this.options) {
             tempBool = tempBool || (option.value ?  ((chart as any)[`difficulty${option.int}`] != 0) : false) 
           }
           // Filter by difficulty
@@ -85,7 +89,7 @@
           //   (this.$data.show.master ?  (chart.difficulty3 != 0) : false)
           // )
         })
-        this.$data.length = returnVal.length
+        this.length = returnVal.length
         return returnVal
       }
     }
