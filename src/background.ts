@@ -96,6 +96,7 @@ import axios from "axios"
 
 import fs from 'fs';
 import { Chart, QChart } from '@/types/chart'
+import { Headers } from '@/types/headers'
 import JSZip, { remove } from "jszip";
 
 import { API } from './modules/api'
@@ -103,7 +104,7 @@ const api = new API();
 
 import async, { doWhilst } from 'async'
 import getRawBody from 'raw-body'
-import { WriteStream } from 'original-fs'
+import zlib from 'zlib'
 
 // Path
 function getAlbumsPath() {
@@ -203,8 +204,10 @@ ipcMain.on('dialog-open', (event) => {
 
 // download
 const axiosDownloadInst = axios.create({
+  decompress: false,
   baseURL: `${api.getChartDownloadBaseUrl()}`,
   timeout: 60000,
+  headers: Headers.DownloadHeaders,
   responseType: "stream"
 });
 let downloads = async.queue((chart: QChart, cb) => {
@@ -215,6 +218,7 @@ let downloads = async.queue((chart: QChart, cb) => {
   })
   .then(async (resp: any) => {
     try {
+      const decomp = resp.data.pipe(zlib.createBrotliDecompress()) as zlib.BrotliDecompress
       var len = 0;
       var count = 0;
       resp.data.on("data", function (chunk:Uint8Array) {
@@ -225,7 +229,7 @@ let downloads = async.queue((chart: QChart, cb) => {
           count = 0
         }
       });
-      const buf = Buffer.from(await getRawBody(resp.data, {
+      const buf = Buffer.from(await getRawBody(decomp, {
         encoding: "ascii"
       }), "base64")
       fs.writeFileSync(path.join(getAlbumsPath(), chart.name + ".mdm"), buf);
