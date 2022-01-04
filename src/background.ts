@@ -242,6 +242,13 @@ ipcMain.on("download-add", (event, chart: Chart) => {
   win.webContents.send("download-changed", getAllDownloads())
 });
 
+ipcMain.on("download-remove", (event, QueueID: string) => {
+  downloads.remove((e) => { 
+    return e.data.QIndex == QueueID 
+  })
+  win.webContents.send("download-changed", getAllDownloads())
+});
+
 ipcMain.on("download-getAll", (event) => {
   event.returnValue = getAllDownloads();
 });

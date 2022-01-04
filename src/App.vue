@@ -70,6 +70,12 @@
                 <v-list-item-subtitle v-if="index != 0">{{ item.author }}</v-list-item-subtitle>
                 <v-list-item-subtitle v-else>Downloaded {{ len }}MB</v-list-item-subtitle>
               </v-list-item-content>
+              <v-list-item-action v-if="index !== 0">
+                <v-btn icon @click="$electron.ipc.send('download-remove', item.QIndex)">
+                  <v-icon>mdi-close</v-icon>
+                </v-btn>
+              </v-list-item-action>
+
           </v-list-item>
           <v-progress-linear
             :value="perc"
@@ -122,7 +128,6 @@ export default Vue.extend({
     if (this.$refs.appbar) {
       appbaro.observe((this.$refs.appbar as any).$el);
     }
-    
 
     window.electron.ipc.receive('download-changed', (event:QChart[]) => {
       this.downloads = event;
