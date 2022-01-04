@@ -1,0 +1,3 @@
+[submodule "goverlay"]
+	path = goverlay
+	url = https://github.com/hiitiger/goverlay.git
