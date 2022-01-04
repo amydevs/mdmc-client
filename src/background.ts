@@ -211,20 +211,24 @@ let downloads = async.queue((chart: QChart, cb) => {
   win.webContents.send("download-changed", getAllDownloads())
   console.log("Starting Download > " + api.getChartDownloadUrl(chart.id as number));
   axiosDownloadInst.get(`${chart.id}`).catch(err => {
-    console.error(err);
-    cb()
+    cb(Error(err.message))
   })
   .then(async (resp: any) => {
-    var len = 0;
-    resp.data.on("data", function (chunk:Uint8Array) {
-      len += chunk.length;
-      win.webContents.send("download-prog",  (len/(1024*1024)).toPrecision(3), 100*(len/20971520))
-    });
-    const buf = Buffer.from(await getRawBody(resp.data, {
-      encoding: "ascii"
-    }), "base64")
-    fs.writeFileSync(path.join(getAlbumsPath(), chart.name + ".mdm"), buf);
-    cb()
+    try {
+      var len = 0;
+      resp.data.on("data", function (chunk:Uint8Array) {
+        len += chunk.length;
+        win.webContents.send("download-prog",  (len/(1024*1024)).toPrecision(3), 100*(len/20971520))
+      });
+      const buf = Buffer.from(await getRawBody(resp.data, {
+        encoding: "ascii"
+      }), "base64")
+      fs.writeFileSync(path.join(getAlbumsPath(), chart.name + ".mdm"), buf);
+      cb()
+    }
+    catch {
+      cb(Error('Could not download chart'))
+    }
   })
 }, 1);
 
@@ -233,6 +237,10 @@ downloads.drain(() => {
   console.log("All downloads finished");
   libraryScan();
 });
+
+downloads.error((err, task) => {
+  console.error(`${task.name} failed to download!`)
+})
 
 ipcMain.on("download-add", (event, chart: Chart) => {
   console.log("Added Download > " + chart.name);
@@ -243,6 +251,7 @@ ipcMain.on("download-add", (event, chart: Chart) => {
 });
 
 ipcMain.on("download-remove", (event, QueueID: string) => {
+  console.log("Removed Download > " + QueueID);
   downloads.remove((e) => { 
     return e.data.QIndex == QueueID 
   })
