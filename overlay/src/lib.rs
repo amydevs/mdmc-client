@@ -3,6 +3,7 @@ use winapi::shared::minwindef::LPARAM;
 use winapi::shared::windef::*;
 use winapi::um::winuser::*;
 use std::ffi::*;
+use std::mem;
 
 #[no_mangle]
 
@@ -41,8 +42,16 @@ unsafe extern "system" fn handle_enum(a: *mut HWND__, b: isize) -> i32 {
     };
     GetWindowRect(b as HWND, &mut rect1);
     println!("{}", rect1.right - rect1.left);
-    
-    // println!("{}", GetWindowTextA(HWND::from(a), std::ptr::null_mut(), 0));
+
+    // SetParent(b as HWND, HWND::from(a));
+    let mut v: Vec<u16> = Vec::with_capacity(255);
+    let read_len = GetWindowTextW(
+        HWND::from(a),
+        v.as_mut_ptr(),
+        255,
+    );
+    v.set_len(read_len as usize);
+    println!("{}", String::from_utf16_lossy(&v));
 
     return 1;
 }
