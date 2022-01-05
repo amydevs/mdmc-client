@@ -52,7 +52,8 @@ unsafe extern "system" fn handle_enum(a: *mut HWND__, b: isize) -> i32 {
     v.set_len(read_len as usize);
     println!("{}", format!("{}", String::from_utf16_lossy(&v)));
     if format!("{}", String::from_utf16_lossy(&v)) == "MuseDash".to_string() {
-        // println!("{:?}", SetWindowLongPtrW(b as HWND, GWL_STYLE, WS_CHILD as LONG_PTR));
+        
+        println!("{:?}", SetWindowLongPtrA(b as HWND, GWL_STYLE, GetWindowLongPtrW(b as HWND, GWL_STYLE) | WS_CHILD as isize));
         println!("{:?}", SetParent(b as HWND, HWND::from(a)));
     }
 

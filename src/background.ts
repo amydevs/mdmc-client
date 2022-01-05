@@ -72,7 +72,6 @@ app.on('ready', async () => {
   }
   
   createWindow();
-  win.setAlwaysOnTop(true, "pop-up-menu");
   var lib = (await import('ffi-napi')).Library(path.join(__dirname, "..", "overlay", "target", "release", "overlay"), {
     fibonacci: ['int', ['pointer']]
   });
