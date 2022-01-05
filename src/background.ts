@@ -72,17 +72,16 @@ app.on('ready', async () => {
   }
   
   createWindow();
-  
+  win.setAlwaysOnTop(true, "pop-up-menu");
   var lib = (await import('ffi-napi')).Library(path.join(__dirname, "..", "overlay", "target", "release", "overlay"), {
     fibonacci: ['int', ['pointer']]
   });
-  console.log(lib.fibonacci(win.getNativeWindowHandle() as any));
+  
   // win.setAlwaysOnTop(true, 'normal');
   // win.setFocusable(false);
-  // globalShortcut.register('CommandOrControl+Shift+O', () => {
-  //   overlayActivated = !overlayActivated;
-  //   win.setAlwaysOnTop(overlayActivated, 'normal');
-  // })
+  globalShortcut.register('CommandOrControl+Shift+O', () => {
+    console.log(lib.fibonacci(win.getNativeWindowHandle() as any));
+  })
   libraryScan()
 })
 
