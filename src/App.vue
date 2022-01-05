@@ -210,6 +210,12 @@ export default Vue.extend({
 });
 </script>
 <style lang="scss">
+.v-toolbar__content {
+  * {
+    -webkit-app-region: no-drag;
+  }
+  -webkit-app-region: drag;
+}
 html{
   overflow-y: hidden !important;
   .v-main__wrap {

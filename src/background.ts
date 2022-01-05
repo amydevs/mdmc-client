@@ -1,12 +1,13 @@
 'use strict'
 
 import path from 'path'
-import { app, protocol, BrowserWindow, ipcMain, dialog } from 'electron'
+import { app, protocol, BrowserWindow, ipcMain, dialog, globalShortcut } from 'electron'
 import { createProtocol } from 'vue-cli-plugin-electron-builder/lib'
 import installExtension, { VUEJS_DEVTOOLS } from 'electron-devtools-installer'
 const isDevelopment = process.env.NODE_ENV !== 'production'
 
 let win: BrowserWindow;
+let overlayActivated = false;
 
 // Scheme must be registered before the app is ready
 protocol.registerSchemesAsPrivileged([
@@ -16,6 +17,7 @@ protocol.registerSchemesAsPrivileged([
 async function createWindow() {
   // Create the browser window.
   win = new BrowserWindow({
+    titleBarStyle: 'hidden',
     autoHideMenuBar: true,
     width: 800,
     height: 600,
@@ -68,7 +70,14 @@ app.on('ready', async () => {
       console.error('Vue Devtools failed to install:', e.toString())
     }
   }
+  
   createWindow()
+  // win.setAlwaysOnTop(true, 'normal');
+  // win.setFocusable(false);
+  // globalShortcut.register('CommandOrControl+Shift+O', () => {
+  //   overlayActivated = !overlayActivated;
+  //   win.setAlwaysOnTop(overlayActivated, 'normal');
+  // })
   libraryScan()
 })
 
