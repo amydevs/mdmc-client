@@ -114,6 +114,7 @@ const api = new API();
 import async, { doWhilst } from 'async'
 import getRawBody from 'raw-body'
 import zlib from 'zlib'
+import { match } from 'assert'
 
 // Path
 function getAlbumsPath() {
@@ -175,6 +176,19 @@ async function libraryScan() {
 }
 
 //handlers
+ipcMain.on('window-handle', (event, handletype) => {
+  switch (handletype) {
+    case "minimize":
+      win.minimize();
+      break;
+    case "maximize":
+      !win.isMaximized() ? win.maximize() : win.unmaximize();
+      break;
+    case "close":
+      win.close();
+      break;
+  }
+})
 ipcMain.on('library-get', (event) => {
   event.returnValue = library;
 })

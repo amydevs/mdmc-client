@@ -8,6 +8,11 @@ const {
 // the ipcRenderer without exposing the entire object
 
 contextBridge.exposeInMainWorld("electron", {
+    window: {
+        handle: (handleType) => {
+            return ipcRenderer.send("window-handle", handleType);
+        }
+    },
     shell: {
         openExternalPlayer: (id) => {
             shell.openExternal(`https://musedash.moe/mdmc/player/${id}`);

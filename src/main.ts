@@ -19,6 +19,9 @@ new Vue({
 declare global {
   interface Window {
     electron: {
+      window: {
+        handle: (handleType: "minimize" | "maximize" | "close") => void;
+      },
       shell: {
         openExternalPlayer: (id: string) => void
       },

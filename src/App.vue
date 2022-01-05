@@ -38,7 +38,16 @@
       <v-spacer></v-spacer>
 
       <v-btn icon @click="downloadDrawer = !downloadDrawer">
-        <v-icon>mdi-tray-arrow-down</v-icon>
+        <v-icon>mdi-folder-download</v-icon>
+      </v-btn>
+      <v-btn icon @click="$electron.window.handle('minimize')">
+        <v-icon>mdi-window-minimize</v-icon>
+      </v-btn>
+      <v-btn icon @click="$electron.window.handle('maximize')">
+        <v-icon>mdi-window-maximize</v-icon>
+      </v-btn>
+      <v-btn icon @click="$electron.window.handle('close')">
+        <v-icon>mdi-window-close</v-icon>
       </v-btn>
     </v-app-bar>
 
