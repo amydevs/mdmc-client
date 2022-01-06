@@ -27,7 +27,9 @@
     "vue-property-decorator": "^9.1.2",
     "vue-router": "^3.2.0",
     "vuetify": "^2.4.0",
-    "vuex": "^3.4.0"
+    "vuex": "^3.4.0",
+    "electron-overlay": "file:./goverlay/electron-overlay",
+    "node-ovhook": "file:./goverlay/node-ovhook"
   },
   "devDependencies": {
     "@types/electron-devtools-installer": "^2.2.0",

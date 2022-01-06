@@ -52,6 +52,11 @@ app.on('window-all-closed', () => {
   }
 })
 
+
+import * as IOverlay from "electron-overlay";
+
+import * as IOVhook from "node-ovhook";
+
 app.on('activate', () => {
   // On macOS it's common to re-create a window in the app when the
   // dock icon is clicked and there are no other windows open.
@@ -72,12 +77,7 @@ app.on('ready', async () => {
   }
   
   createWindow()
-  // win.setAlwaysOnTop(true, 'normal');
-  // win.setFocusable(false);
-  // globalShortcut.register('CommandOrControl+Shift+O', () => {
-  //   overlayActivated = !overlayActivated;
-  //   win.setAlwaysOnTop(overlayActivated, 'normal');
-  // })
+  IOverlay!.start();
   libraryScan()
 })
 
