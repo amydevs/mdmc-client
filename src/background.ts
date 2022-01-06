@@ -72,12 +72,14 @@ app.on('ready', async () => {
   }
   
   createWindow();
-  var lib = (await import('ffi-napi')).Library(path.join(__dirname, "..", "overlay", "target", "release", "overlay"), {
-    fibonacci: ['int', ['pointer']]
+  var lib = (await import('ffi-napi')).Library(path.join(__dirname, "..", "coverlay", "x64", "Debug", "coverlay"), {
+    fibonacci: ['int', ['pointer']],
+    debug: ['int', []]
   });
   
   // win.setAlwaysOnTop(true, 'normal');
   // win.setFocusable(false);
+  lib.debug();
   globalShortcut.register('CommandOrControl+Shift+O', () => {
     console.log(lib.fibonacci(win.getNativeWindowHandle() as any));
   })
