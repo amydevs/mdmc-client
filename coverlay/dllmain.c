@@ -32,17 +32,53 @@ extern "C" {
     HWND* ghwnd;
     FILE* fDummy;
 
+    //The function that implements the key logging functionality
+    LRESULT CALLBACK LowLevelKeyboardProc(int nCode, WPARAM wParam, LPARAM lParam)
+    {
+        
+        // Declare a pointer to the KBDLLHOOKSTRUCTdsad
+        KBDLLHOOKSTRUCT* pKeyBoard = (KBDLLHOOKSTRUCT*)lParam;
+        int pressedKey = pKeyBoard->vkCode;
+        switch (wParam)
+        {
+            case WM_KEYDOWN: 
+            {
+                SendMessage(ghwnd, WM_KEYDOWN, pressedKey, 0x002C0001);
+            }
+            case WM_CHAR: {
+                SendMessage(ghwnd, WM_CHAR, pressedKey, 0x002C0001);
+            }
+            case WM_KEYUP: // When the key has been pressed and released
+            {
+                //get the key code
+                SendMessage(ghwnd, WM_KEYUP, (int)((KBDLLHOOKSTRUCT*)lParam)->vkCode, 0x002C0001);
+                printf("%c\n", ((KBDLLHOOKSTRUCT*)lParam)->vkCode);
+            }
+            break;
+            default:
+                return CallNextHookEx(NULL, nCode, wParam, lParam);
+                break;
+        }
+
+        //according to winapi all functions which implement a hook must return by calling next hook
+        return CallNextHookEx(NULL, nCode, wParam, lParam);
+    }
+
     BOOL CALLBACK handle_enum(__in HWND a) {
         char buff[255];
 
         GetWindowTextA(a, (LPSTR)buff, 254);
-        
-        if (strstr(buff, "MuseDash")) {
+        if (strstr(buff, "Command Prompt")) {
+        /*if (strstr(buff, "MuseDash")) {*/
             printf("pog");
             printf("%lu \n", GetWindowLongW(ghwnd, GWL_STYLE));
             SetWindowLongPtr(ghwnd, GWL_STYLE, (LONG_PTR)WS_CHILD | GetWindowLongPtr(ghwnd, GWL_STYLE));
             printf("%lu", GetWindowLongW(ghwnd, GWL_STYLE));
             SetParent(ghwnd, a);
+
+            HINSTANCE instance = GetModuleHandle(NULL);
+
+            SetWindowsHookEx(WH_KEYBOARD_LL, LowLevelKeyboardProc, instance, 0);
         }
 
         return TRUE;
