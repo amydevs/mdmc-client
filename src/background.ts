@@ -241,7 +241,6 @@ let downloads = async.queue((chart: QChart, cb) => {
   })
   .then(async (resp: any) => {
     try {
-      const decomp = resp.data.pipe(zlib.createBrotliDecompress()) as zlib.BrotliDecompress
       var len = 0;
       var count = 0;
       resp.data.on("data", function (chunk:Uint8Array) {
@@ -252,9 +251,7 @@ let downloads = async.queue((chart: QChart, cb) => {
           count = 0
         }
       });
-      const buf = Buffer.from(await getRawBody(decomp, {
-        encoding: "ascii"
-      }), "base64")
+      const buf = Buffer.from(await getRawBody(resp.data));
       fs.writeFileSync(path.join(getAlbumsPath(), chart.name + ".mdm"), buf);
       cb()
     }
