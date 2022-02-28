@@ -247,7 +247,8 @@ let downloads = async.queue((chart: QChart, cb) => {
         len += chunk.length;
         count++;
         if(count >= 40) {
-          win.webContents.send("download-prog",  (len/(1024*1024)).toPrecision(3), 100*(len/20971520))
+          const contentlen = new Number(resp.headers["content-length"]) as number;
+          win.webContents.send("download-prog",  (len/(1024*1024)).toPrecision(3), 100*(len/contentlen))
           count = 0
         }
       });
